@@ -28,7 +28,7 @@ instruction list by the execution of the sequence. If one were to ignore
 variables, the `(jump_to sequence_name)` instruction is similar to performing
 `(call sequence_name) (done)`.
 
-{{< fatecode >}}(define_sequence {String} (([C0 = TYPE] {V0 = String}) ... ([CN = TYPE] {VN = String})) <I0 = INSTRUCTIONS|VALUE> ... <IM = INSTRUCTIONS|VALUE>){{< /fatecode >}}
+{{< fatecode >}}(define_sequence {String} (([C0 = TYPE] {V0 = String}) ... ([CN = TYPE] {VN = String})) [I0 = INSTRUCTIONS|VALUE] ... [IM = INSTRUCTIONS|VALUE]){{< /fatecode >}}
 **Effect:** Defines the sequence `{String}`, with variables `V0` ... `VN` of types `C0` ...`CN` as parameters, and instructions `I0` ... `IM` as content.
 
 **Acceptable Aliases:** `declare_sequence`, `def_seq`, `define_procedure`, `declare_procedure`, `def_proc`.

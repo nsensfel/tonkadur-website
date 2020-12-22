@@ -74,7 +74,7 @@ Returns the number of elements held by the collection at
 Returns an `ADDRESS` to the memory element at address `[COMPUTATION]`. Raises a
 runtime error if `[COMPUTATION]` is not a memory element.
 
-{{< fatecode >}}(relative_address <R0 = (COLLECTION|STRUCTURE) ADDRESS> [STRING]){{< /fatecode >}}
+{{< fatecode >}}(relative_address [R0 = (COLLECTION|STRUCTURE) ADDRESS] [STRING]){{< /fatecode >}}
 Returns a `REFERENCE` to member `[STRING]` of `R0`.
 
 {{< fatecode >}}(value_of [ADDRESS]){{< /fatecode >}}

@@ -6,11 +6,12 @@ lists; and `[SET]`, which are ordered lists, but only useable with
 `[COMPARABLE]` elements.
 
 ### ADDING A MEMBER
-{{< fatecode >}}(add_element! [COMPUTATION*] [COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(add_element! [C0 = COMPUTATION*] ... [CN = COMPUTATION*] [COLLECTION VAR]){{< /fatecode >}}
 
-Adds `[COMPUTATION*]` to `[COLLECTION VAR]`. If `[COLLECTION VAR]` is a
-`[LIST]`, the new member is added at the end of the list. Note that
-`[COMPUTATION*]` does not support use of the variable shorthand.
+Adds `C0` ... `CN` to `[COLLECTION VAR]`. If `[COLLECTION VAR]` is a `[LIST]`,
+the new members are added at the end of the list, in order (meaning that the
+list then ends with `CN`). Note that `[COMPUTATION*]` does not support use of
+the variable shorthand.
 
 ### ADDING A MEMBER AT INDEX
 {{< fatecode >}}(add_element_at! [INT] [COMPUTATION*] [LIST VAR]){{< /fatecode >}}
@@ -53,19 +54,19 @@ Removes the element of `[COLLECTION]` at `[INT]`.
 Reverses the order of the members of `[LIST]`.
 
 ### FILTER ELEMENTS
-{{< fatecode >}}(filter! <LAMBDA BOOL (X)> [X COLLECTION VAR]){{< /fatecode >}}
-{{< fatecode >}}(filter! <LAMBDA BOOL (X Y0 ... YN)> [X COLLECTION VAR] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(filter! [LAMBDA BOOL (X)] [X COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(filter! [LAMBDA BOOL (X Y0 ... YN)] [X COLLECTION VAR] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
 Modifies `[X COLLECTION VAR]` so that only the elements for which
-`<LAMBDA BOOL (X)>` returns `true` remain. If the lambda function needs extra
+`[LAMBDA BOOL (X)]` returns `true` remain. If the lambda function needs extra
 parameters, use the second syntax, which adds those parameters at the end of the
 `(filter! ...)` call. Note that the variable shorthand cannot be used for these
 extra parameters.
 
 ### FILTER ELEMENTS (INDEXED)
-{{< fatecode >}}(indexed_filter! <LAMBDA BOOL (INT X)> [X COLLECTION VAR]){{< /fatecode >}}
-{{< fatecode >}}(indexed_filter! <LAMBDA BOOL (INT X Y0 ... YN)> [X COLLECTION VAR] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(indexed_filter! [LAMBDA BOOL (INT X)] [X COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(indexed_filter! [LAMBDA BOOL (INT X Y0 ... YN)] [X COLLECTION VAR] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
 Modifies `[X COLLECTION VAR]` so that only the elements for which
-`<LAMBDA BOOL (INT X)>` (with the `INT` being the element's index) returns
+`[LAMBDA BOOL (INT X)]` (with the `INT` being the element's index) returns
 `true` remain. If the lambda function needs extra parameters, use the second
 syntax, which adds those parameters at the end of the `(indexed_filter! ...)`
 call.  Note that the variable shorthand cannot be used for these extra

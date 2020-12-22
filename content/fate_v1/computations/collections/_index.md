@@ -25,10 +25,11 @@ Returns a copy of `[LIST]` with `[COMPUTATION*]` added at index `[INT]`. Note
 that `[COMPUTATION*]` does not allow use of the variable shorthand.
 
 ### ADD ELEMENT
-{{< fatecode >}}(add_element [COMPUTATION*] [COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(add_element [C0 = COMPUTATION*] ... [CN = COMPUTATION*] [COLLECTION]){{< /fatecode >}}
 
-Returns a copy of `[COLLECTION]` with `[COMPUTATION*]` added. If `[COLLECTION]`
-is a `[LIST]`, then the element is added at the end of the list.
+Returns a copy of `[COLLECTION]` with `C0` ... `CN` added. If `[COLLECTION]`
+is a `[LIST]`, then the elements are added at the end of the list, in order
+(meaning that `CN` will be the last element added).
 Note that `[COMPUTATION*]` does not allow use of the variable shorthand.
 
 ### ADDING MEMBERS
@@ -69,7 +70,7 @@ Returns true if, and only if `[COLLECTION]` is empty.
 {{< fatecode >}}(filter [LAMBDA BOOL (X Y0 ... YN)] [X COLLECTION] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
 
 Returns a copy of `[X COLLECTION]` in which only the elements for which
-`<LAMBDA BOOL (X)>` returns `true` remain. If the lambda function needs extra
+`[LAMBDA BOOL (X)]` returns `true` remain. If the lambda function needs extra
 parameters, use the second syntax, which adds those parameters at the end of the
 `(filter ...)` call. Note that the variable shorthand cannot be used for these
 extra parameters.
@@ -79,7 +80,7 @@ extra parameters.
 {{< fatecode >}}(indexed_filter [LAMBDA BOOL (INT X Y0 ... YN)] [X COLLECTION] [Y0 COMPUTATION*] ... [YN COMPUTATION*]){{< /fatecode >}}
 
 Returns a copy of `[INT X COLLECTION]` in which only the elements for which
-`<LAMBDA BOOL (INT X)>` (with `INT` being the element's index) returns `true`
+`[LAMBDA BOOL (INT X)]` (with `INT` being the element's index) returns `true`
 remain. If the lambda function needs extra parameters, use the second syntax,
 which adds those parameters at the end of the `(indexed_filter ...)` call. Note
 that the variable shorthand cannot be used for these extra parameters.
@@ -90,9 +91,33 @@ that the variable shorthand cannot be used for these extra parameters.
 {{< fatecode >}}(foldr [LAMBDA X (X Y)> [X COMPUTATION*] [Y COLLECTION]){{< /fatecode >}}
 {{< fatecode >}}(foldr [LAMBDA X (X Y Z0 ... ZN)] [X COMPUTATION*] [Y COLLECTION] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
 
-Returns the result of iterating `<LAMBDA X (X Y)>` over `[Y COLLECTION]`, with
+Returns the result of iterating `[LAMBDA X (X Y)]` over `[Y COLLECTION]`, with
 `[X COMPUTATION*]` being the initial value. The direction of the iteration is
 by ascending index order when using `foldl`, and the opposite order when using
 `foldr`. Extra parameters for the lambda function can be passed as extra
 parameters of the call. Note that the variable shorthand cannot be used for
 those extra parameters, nor for the initial value.
+
+### MERGE COLLECTIONS
+{{< fatecode >}}(merge_to_list [LAMBDA O (X Y)] [X COLLECTION] [Y COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(merge_to_list [LAMBDA O (X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(merge_to_set [LAMBDA O (X Y)] [X COLLECTION] [Y COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(merge_to_set [LAMBDA O (X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+### SAFE-MERGE COLLECTIONS
+{{< fatecode >}}(safe_merge_to_list [LAMBDA O (X Y)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_merge_to_list [LAMBDA O (X Y Z0 ... ZN)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_merge_to_set [LAMBDA O (X Y)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_merge_to_set [LAMBDA O (X Y Z0 ... ZN)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+### MERGE COLLECTIONS (INDEXED)
+{{< fatecode >}}(indexed_merge_to_list [LAMBDA O (INT X Y)] [X COLLECTION] [Y COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(indexed_merge_to_list [LAMBDA O (INT X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(indexed_merge_to_set [LAMBDA O (INT X Y)] [X COLLECTION] [Y COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(indexed_merge_to_set [LAMBDA O (INT X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+### SAFE-MERGE COLLECTIONS (INDEXED)
+{{< fatecode >}}(safe_indexed_merge_to_list [LAMBDA O (INT X INT Y)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_indexed_merge_to_list [LAMBDA O (INT X INT Y Z0 ... ZN)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_indexed_merge_to_set [LAMBDA O (INT X INT Y)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*]){{< /fatecode >}}
+{{< fatecode >}}(safe_indexed_merge_to_set [LAMBDA O (INT X INT Y Z0 ... ZN)] [X COLLECTION] [X COMPUTATION*] [Y COLLECTION] [Y COMPUTATION*] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}

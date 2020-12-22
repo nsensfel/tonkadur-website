@@ -20,7 +20,7 @@ applicable. Structure members can be accessed by using `.` in `{String}`.
 {{< fatecode >}}{Structure Var Name}.{Field Name}{{< /fatecode >}}
 {{< fatecode >}}(field [STRUCTURE VAR] {String}){{< /fatecode >}}
 
-Accesses the `{String}` field of the structure `<STRUCTURE_VAR>`. Using `.` to
+Accesses the `{String}` field of the structure `[STRUCTURE VAR]`. Using `.` to
 access fields is recommended over the use of this operator.
 
 ### STRUCTURE FIELD VALUE
@@ -33,10 +33,10 @@ Returns the value of the `{String}` field of the structure `[STRUCTURE]`.
 Defines a hierarchical level and local variables `V0` ... `VN` with values `C0` ... `CN`, and returns the value of `[R]`.
 
 ### CAST
-{{< fatecode >}}(cast [TYPE] <COMPUTATION*>){{< /fatecode >}}
+{{< fatecode >}}(cast [TYPE] [COMPUTATION*]){{< /fatecode >}}
 
-Transforms `<COMPUTATION*>` into a value of type `[TYPE]`. Note that the variable
-shorthand cannot be used for `<COMPUTATION*>`. The following type changes are
+Transforms `[COMPUTATION*]` into a value of type `[TYPE]`. Note that the variable
+shorthand cannot be used for `[COMPUTATION*]`. The following type changes are
 allowed:
 * `[FLOAT]` to `[FLOAT]`, `[INT]`, and `[STRING]`.
 * `[INT]` to `[FLOAT]`, `[INT]`, and `[STRING]`.

@@ -28,9 +28,9 @@ Two collection types are available:
 * `(set [COMPARABLE TYPE])`
 
 Lambda computations are available:
-* `(lambda <r = TYPE> (<a0 = TYPE> ... <an = TYPE>))` is a type corresponding
-  to a lambda function returning a value of type `r` and taking parameters of
-  types `a0` ... `an`.
+* `(lambda [R = TYPE] ([A0 = TYPE] ... [AN = TYPE]))` is a type corresponding
+  to a lambda function returning a value of type `R` and taking parameters of
+  types `A0` ... `AN`.
 
 ### Common Type Groupings
 * `[NUMBER]` corresponds to `int`, `float`.
@@ -49,7 +49,7 @@ Lambda computations are available:
    `[PRIMITIVE]`, `{String}` is a subtype of `[TYPE]`.
 
 ### Structures
-{{< fatecode >}}(declare_structure_type {String} (<t0 = TYPE> {f0 = String}) ... (<tn = TYPE> {fn = String})){{< /fatecode >}}.
+{{< fatecode >}}(declare_structure_type {String} ([T0 = TYPE] {F0 = String}) ... ([TN = TYPE] {fn = String})){{< /fatecode >}}.
 
 ## Examples
 
