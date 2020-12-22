@@ -8,6 +8,7 @@ theme = "hugo-theme-learn"
    disableShortcutsTitle=true
    disableInlineCopyToClipBoard=true
    themeVariant = "glauque"
+   disableLandingPageButton = true
 
 # For search functionality
 [outputs]

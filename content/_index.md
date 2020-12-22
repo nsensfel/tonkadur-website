@@ -1,5 +1,6 @@
 ---
 title: "Main"
+hidden: true
 ---
 # Welcome to Tonkadur's website
 Tonkadur is a tool to create interactive narratives.
