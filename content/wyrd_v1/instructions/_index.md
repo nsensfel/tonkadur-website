@@ -1,5 +1,6 @@
 ---
 title: Instructions
+weight: 2
 ---
 This page presents all the instructions that can be performed in Wyrd.
 Instructions do not return values. With one exception, all instructions increase

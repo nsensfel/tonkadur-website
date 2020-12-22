@@ -1,5 +1,6 @@
 ---
 title: Aliases
+weight: 4
 ---
 Nearly all computations and instructions have aliases, making it easier to
 write in the language when not used to it. This page provides most of them.  As

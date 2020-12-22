@@ -1,5 +1,6 @@
 ---
 title: Computations
+weight: 1
 ---
 This page presents all the computations that can be performed in Wyrd.
 Computations may access the current memory, but, with one exception, do not

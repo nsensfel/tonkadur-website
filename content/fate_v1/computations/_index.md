@@ -1,5 +1,6 @@
 ---
 title: Computations
+weight: 2
 ---
 Computations are values. They may read from the memory, but do not modify it
 (with a single exception).

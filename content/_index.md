@@ -1,8 +1,8 @@
 ---
 title: "Main"
 ---
-# Welcome to Tonkadur's website!
-Tonkadur is a tool to create game narratives.
+# Welcome to Tonkadur's website
+Tonkadur is a tool to create interactive narratives.
 
 ### Find out all about Tonkadur
  * **Plain-text format.** Just write in your favorite editor and use your usual tools.

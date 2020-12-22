@@ -7,6 +7,7 @@ theme = "hugo-theme-learn"
    custom_css = ["css/prism.css"]
    disableShortcutsTitle=true
    disableInlineCopyToClipBoard=true
+   themeVariant = "glauque"
 
 # For search functionality
 [outputs]

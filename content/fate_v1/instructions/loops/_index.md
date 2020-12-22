@@ -17,10 +17,10 @@ Executes `[I0]` ... `[IM]`,  and does so again as long as, `[BOOL]` yields
 true.
 
 ### FOR
-{{< fatecode >}}(for <pre = INSTRUCTION> [BOOL] <post = INSTRUCTION> [I0 = INSTRUCTION] ... [IM = INSTRUCTION]){{< /fatecode >}}
+{{< fatecode >}}(for [PRE = INSTRUCTION] [BOOL] [POST = INSTRUCTION] [I0 = INSTRUCTION] ... [IM = INSTRUCTION]){{< /fatecode >}}
 
-Executes `<pre>`, then, if and as long as `[BOOL]` yields true, executes
-`[I0]` ... `[IM]` followed by `<post>`.
+Executes `[PRE]`, then, if and as long as `[BOOL]` yields true, executes
+`[I0]` ... `[IM]` followed by `[POST]`.
 
 ### FOR EACH
 {{< fatecode >}}(foreach [COLLECTION] {String} [I0 = INSTRUCTION] ... [IM = INSTRUCTION]){{< /fatecode >}}
