@@ -1,0 +1,12 @@
+baseURL = "https://tonkadur.of.tacticians.online/"
+languageCode = "en-us"
+title = "Tonkadur"
+theme = "hugo-theme-learn"
+[params]
+   custom_css = ["css/prism.css"]
+
+# For search functionality
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+
