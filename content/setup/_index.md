@@ -1,7 +1,8 @@
 ---
-title: "Setup"
+menuTitle: "Setup"
+title: "Setting Up Tonkadur"
+weight: 1
 ---
-# Setting Up Tonkadur
 There are two parts to set up: the compiler, and the interpreter. The compiler
 is provided and does not require any modification. The interpreter depends on
 the software you wish to integrate Tonkadur to. Examples of interpreters are

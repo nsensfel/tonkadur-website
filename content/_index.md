@@ -51,6 +51,3 @@ implications when it comes time to add support for it to your engine.
 * [Yarn Spinner](https://yarnspinner.dev/).
 * [DLG](https://github.com/iLambda/language-dlg). Nowhere near as popular as the
 other two alternatives, but its approach shares more similarities with Tonkadur.
-
-
-### Syntax Highlight Test:

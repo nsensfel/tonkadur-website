@@ -1,6 +1,7 @@
 ---
 menuTitle: Wyrd
 title: Wyrd (Version 1)
+weight: 4
 ---
 Wyrd is the language in which the narrative is given to the game engine. It is
 purposefully kept small and simple to facilitate porting Tonkadur to a new

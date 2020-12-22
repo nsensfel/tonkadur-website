@@ -18,61 +18,61 @@ We are trying to add a variable that corresponds to money. An `int` is thus
 appropriate.
 
 **main.fate:**
+{{< fatecode >}}(fate_version 1)
 
-         (fate_version 1)
+(local int hero_money)
+(local int price_of_booze)
 
-         (local int hero_money)
-         (local int price_of_booze)
+(set hero_money 42)
+(set price_of_booze 12)
 
-         (set hero_money 42)
-         (set price_of_booze 12)
+Once upon a time, starting a story with these words wasn't considered
+a cliche. Starting in a tavern might also not be seen as very
+original.  Having the main character be an street orphan, raised by
+some mysterious sage all to end up as a mercenary with an uncommonly
+strong sense of honor probably isn't going to lead to any praises for
+novelty either. Maybe you should drink to that.
+(newline)
+Or maybe you shouldn't. This isn't your first mug. Not your second
+either.  Drinking to forget that you are a stereotypical hero isn't
+going to solve anything. Worse, the alcoholic trait is part of the
+image.
+(newline)
+As you contemplate your own pointless description, your gaze leaves
+what turns out to be an already empty glass in your hand and finds the
+barman.
 
-         Once upon a time, starting a story with these words wasn't considered
-         a cliche. Starting in a tavern might also not be seen as very
-         original.  Having the main character be an street orphan, raised by
-         some mysterious sage all to end up as a mercenary with an uncommonly
-         strong sense of honor probably isn't going to lead to any praises for
-         novelty either. Maybe you should drink to that.
-         (newline)
-         Or maybe you shouldn't. This isn't your first mug. Not your second
-         either.  Drinking to forget that you are a stereotypical hero isn't
-         going to solve anything. Worse, the alcoholic trait is part of the
-         image.
-         (newline)
-         As you contemplate your own pointless description, your gaze leaves
-         what turns out to be an already empty glass in your hand and finds the
-         barman.
+(player_choice
+   (
+      ( Ask the barman for a refill )
+      Staring straight at the barman, you raise your glass and
+      proclaim:
+      (newline)
+      "This soon-to-be world savior needs more booze!"
+      (newline)
+      The barman's lack of reaction is disappointing, but seeing the
+      beer being poured does help improve the mood.
+      (newline)
+      Satisfied, you hand the barman (var price_of_booze) copper coins.
+      (set hero_money
+         (- (var hero_money) (var price_of_booze))
+      )
+   )
+   (
+      ( Fall asleep )
+      Deciding to break away from the expected storyline, you promptly
+      fall asleep.
+      (newline)
+      ...
+      (newline)
+      Upon waking up, your hard-trained reflexes inform you that
+      someone stole all your money.
+      (set hero_money 0)
+   )
+)
 
-         (player_choice
-            (
-               ( Ask the barman for a refill )
-               Staring straight at the barman, you raise your glass and
-               proclaim:
-               (newline)
-               "This soon-to-be world savior needs more booze!"
-               (newline)
-               The barman's lack of reaction is disappointing, but seeing the
-               beer being poured does help improve the mood.
-               (newline)
-               Satisfied, you hand the barman (var price_of_booze) copper coins.
-               (set hero_money
-                  (- (var hero_money) (var price_of_booze))
-               )
-            )
-            (
-               ( Fall asleep )
-               Deciding to break away from the expected storyline, you promptly
-               fall asleep.
-               (newline)
-               ...
-               (newline)
-               Upon waking up, your hard-trained reflexes inform you that
-               someone stole all your money.
-               (set hero_money 0)
-            )
-         )
-
-         (end)
+(end)
+{{< /fatecode >}}
 
 * `(local int hero_money)` declares an `int` variable with the name
   `hero_money`.

@@ -2,11 +2,27 @@ baseURL = "https://tonkadur.of.tacticians.online/"
 languageCode = "en-us"
 title = "Tonkadur"
 theme = "hugo-theme-learn"
+
 [params]
    custom_css = ["css/prism.css"]
+   disableShortcutsTitle=true
 
 # For search functionality
 [outputs]
 home = [ "HTML", "RSS", "JSON"]
 
+[[menu.shortcuts]]
+name = "<i class='fab fa-github'></i> Github"
+identifier = "ds"
+url = "https://github.com/nsensfel/tonkadur"
+weight = 50
 
+[[menu.shortcuts]]
+name = "<i class='fab fa-discord'></i> Discord"
+url = "https://discord.gg/ft4gFmK"
+weight = 51
+
+[[menu.shortcuts]]
+name = "<i class='fab fa-reddit'></i> Reddit"
+url = "https://www.reddit.com/r/Tonkadur"
+weight = 52

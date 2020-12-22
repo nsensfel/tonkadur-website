@@ -1,6 +1,7 @@
 ---
 title: "Fate (Version 1)"
 menuTitle: "Fate"
+weight: 3
 ---
 
 When using Tonkadur, Fate is the language the author writes in. This language is
