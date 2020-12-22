@@ -6,13 +6,14 @@ theme = "hugo-theme-learn"
 [params]
    custom_css = ["css/prism.css"]
    disableShortcutsTitle=true
+   disableInlineCopyToClipBoard=true
 
 # For search functionality
 [outputs]
 home = [ "HTML", "RSS", "JSON"]
 
 [[menu.shortcuts]]
-name = "<i class='fab fa-github'></i> Github"
+name = "<i class='fab fa-github'></i> GitHub"
 identifier = "ds"
 url = "https://github.com/nsensfel/tonkadur"
 weight = 50
