@@ -71,3 +71,20 @@ Modifies `[X COLLECTION VAR]` so that only the elements for which
 syntax, which adds those parameters at the end of the `(indexed_filter! ...)`
 call.  Note that the variable shorthand cannot be used for these extra
 parameters.
+
+### MERGE COLLECTIONS
+{{< fatecode >}}(merge! [LAMBDA Y (X Y)] [X COLLECTION] [Y COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(merge! [LAMBDA Y (X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION VAR] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+
+### SAFE-MERGE COLLECTIONS
+{{< fatecode >}}(safe_merge! [LAMBDA Y (X Y)] [X COMPUTATION*] [X COLLECTION] [Y COMPUTATION*] [Y COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(safe_merge! [LAMBDA Y (X Y Z0 ... ZN)] [X COLLECTION] [X COMPUTATION*] [Y COMPUTATION*] [Y COLLECTION VAR] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+### MERGE COLLECTIONS (INDEXED)
+{{< fatecode >}}(indexed_merge! [LAMBDA Y (INT X Y)] [X COLLECTION] [Y COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(indexed_merge! [LAMBDA Y (INT X Y Z0 ... ZN)] [X COLLECTION] [Y COLLECTION VAR] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}
+
+### SAFE-MERGE COLLECTIONS (INDEXED)
+{{< fatecode >}}(safe_indexed_merge! [LAMBDA Y (INT X INT Y)] [X COMPUTATION*] [X COLLECTION] [Y COMPUTATION*] [Y COLLECTION VAR]){{< /fatecode >}}
+{{< fatecode >}}(safe_indexed_merge! [LAMBDA Y (INT X INT Y Z0 ... ZN)] [X COMPUTATION*] [X COLLECTION] [Y COMPUTATION*] [Y COLLECTION VAR] [Z0 COMPUTATION*] ... [ZN COMPUTATION*]){{< /fatecode >}}

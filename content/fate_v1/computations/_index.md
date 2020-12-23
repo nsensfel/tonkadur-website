@@ -18,13 +18,13 @@ applicable. Structure members can be accessed by using `.` in `{String}`.
 
 ### STRUCTURE FIELD ACCESS
 {{< fatecode >}}{Structure Var Name}.{Field Name}{{< /fatecode >}}
-{{< fatecode >}}(field [STRUCTURE VAR] {String}){{< /fatecode >}}
+{{< fatecode >}}(field {String} [STRUCTURE VAR]){{< /fatecode >}}
 
 Accesses the `{String}` field of the structure `[STRUCTURE VAR]`. Using `.` to
 access fields is recommended over the use of this operator.
 
 ### STRUCTURE FIELD VALUE
-{{< fatecode >}}(get_field [STRUCTURE] {String}){{< /fatecode >}}
+{{< fatecode >}}(get_field {String} [STRUCTURE]){{< /fatecode >}}
 Returns the value of the `{String}` field of the structure `[STRUCTURE]`.
 
 ### TEMPORARY VARIABLES

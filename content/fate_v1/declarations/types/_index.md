@@ -11,7 +11,8 @@ There are a few base types already defined:
 * `bool`: a Boolean (i.e. `(true)` or `(false)`).
 * `string`: a list of characters, not including newlines (e.g. `bob`,
   `something else`, `日本のもの`, or `الاشياء العربية`). This cannot include
-  computations: only hardcoded strings.
+  computations: only hardcoded strings. `(lp)` will be substituted by a `(` and
+  `(rp)` by a `)`, letting you use parentheses in a string.
 
 * `text`: a list of computations, interpreted as text, which may have
   attributes.
