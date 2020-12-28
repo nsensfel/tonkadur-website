@@ -8,31 +8,31 @@ the Program Counter by 1.
 
 
 ## ADD CHOICE
-{{< fatecode >}}(add_choice [RICH TEXT]){{< /fatecode >}}
+{{< fatecode >}}(add_choice [TEXT]){{< /fatecode >}}
 Adds a new option for the next `resolve_choices` instruction. The new option
-presents the player with `[RICH TEXT]`.
+presents the player with `[TEXT]`.
 
 ## INTEGER PROMPT
-{{< fatecode >}}(prompt_integer [INT REFERENCE] [MIN = INT] [MAX = INT] [RICH TEXT]){{< /fatecode >}}
+{{< fatecode >}}(prompt_integer [INT REFERENCE] [MIN = INT] [MAX = INT] [TEXT]){{< /fatecode >}}
 
 Prompts the user for an integer between `[MIN]` and `[MAX]` by displaying the
-message `[RICH TEXT]`. The result is stored in `[INT REFERENCE]`.
+message `[TEXT]`. The result is stored in `[INT REFERENCE]`.
 
 ## STRING PROMPT
-{{< fatecode >}}(prompt_string [STRING REFERENCE] [MIN = INT] [MAX = INT] [RICH TEXT]){{< /fatecode >}}
+{{< fatecode >}}(prompt_string [STRING REFERENCE] [MIN = INT] [MAX = INT] [TEXT]){{< /fatecode >}}
 
 Prompts the user for a string of size between `[MIN]` and `[MAX]` by displaying
-the message `[RICH TEXT]`. The result is stored in `[STRING REFERENCE]`.
+the message `[TEXT]`. The result is stored in `[STRING REFERENCE]`.
 
 
 ## ASSERT
-{{< fatecode >}}(assert [BOOL] [RICH TEXT]){{< /fatecode >}}
-If `[BOOL]` isn't _true_, raise a runtime error containing `[RICH TEXT]`.
+{{< fatecode >}}(assert [BOOL] [TEXT]){{< /fatecode >}}
+If `[BOOL]` isn't _true_, raise a runtime error containing `[TEXT]`.
 
 
 ## DISPLAY
-{{< fatecode >}}(display [RICH TEXT]){{< /fatecode >}}
-Displays `[RICH TEXT]` to the player.
+{{< fatecode >}}(display [TEXT]){{< /fatecode >}}
+Displays `[TEXT]` to the player.
 
 
 ## END

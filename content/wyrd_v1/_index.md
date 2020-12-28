@@ -43,7 +43,7 @@ Lambda functions are stored as an `INT` corresponding to a line in the program.
 * `[SOMETHING] COLLECTION`, table mapping `STRING` to `[SOMETHING]`.
 * `FLOAT`.
 * `INT`.
-* `RICH TEXT`, a list of `STRINGS` with attributes attached.
+* `TEXT`, a list of `STRINGS` with attributes attached.
 * `STRING`.
 * `STRUCTURE` (or `DICTIONARY`), table mapping `STRING` to values of any type.
 * `{String}`, a hard-coded string.
@@ -51,7 +51,7 @@ Lambda functions are stored as an `INT` corresponding to a line in the program.
 #### Aliases sometimes used to refer to types
 * `? ADDRESS`: an `ADDRESS` pointing to a particular type.
 * `BASE TYPE`: `INT`, `FLOAT`, `BOOL`, `STRING`.
-* `COMPARABLE`: `INT`, `FLOAT`, `BOOL`, `STRING`, `RICH TEXT`, `ADDRESS`.
+* `COMPARABLE`: `INT`, `FLOAT`, `BOOL`, `STRING`, `TEXT`, `ADDRESS`.
 * `COLLECTION`: any `? COLLECTION`.
 * `COMPUTATION`: any type.
 * `NUMBER`: `INT` or `FLOAT`.

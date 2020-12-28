@@ -12,7 +12,7 @@ event type must be declared before use.
 `[C0]`, ..., `[CN]` can be used.
 
 ## Examples
-* `(declare_event_type user_string_input rich_text (ptr string))`
+* `(declare_event_type user_string_input text (ptr string))`
 * `(declare_event_type wait int)`
 * `(declare_event_type set_background_to string)`
 * `(declare_event_type rumble)`

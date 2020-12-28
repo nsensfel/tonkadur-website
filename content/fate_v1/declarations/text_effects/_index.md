@@ -1,10 +1,10 @@
 ---
 title: Text Effects
 ---
-Text effects are attributes that can be given to rich text elements. The
+Text effects are attributes that can be given to text elements. The
 effects themselves can take parameters. To avoid errors that would be difficult
 to detect, Tonkadur expects text effects to be declared before being used.
-Note that multiple text effects can be applied to the same rich text elements,
+Note that multiple text effects can be applied to the same text elements,
 so there is no need to create text effects that combine other text effects.
 
 Two text effects cannot have the same name, even if their parameter types

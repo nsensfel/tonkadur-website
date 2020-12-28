@@ -33,11 +33,15 @@ Lambda computations are available:
   to a lambda function returning a value of type `R` and taking parameters of
   types `A0` ... `AN`.
 
+Procedures/sequences can be stored for future reference:
+* `(sequence ([A0 = TYPE] ... [AN = TYPE]))` is a type corresponding
+  to a procedure/sequence taking parameters of types `A0` ... `AN`.
+
 ### Common Type Groupings
 * `[NUMBER]` corresponds to `int`, `float`.
 * `[COLLECTION]` corresponds to `(list [TYPE])` and `(set [COMPARABLE TYPE])`.
-* `[PRIMITIVE]` `int`, `float`, `bool`, `string`, `rich_text`.
-* `[COMPARABLE]` corresponds to `int`, `float`, `bool`, `string`, `rich_text`,
+* `[PRIMITIVE]` `int`, `float`, `bool`, `string`, `text`.
+* `[COMPARABLE]` corresponds to `int`, `float`, `bool`, `string`, `text`,
   and `(ptr [TYPE])`. This indicates types for which operators such as `<` are
   defined.
 

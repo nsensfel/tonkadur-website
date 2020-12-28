@@ -16,6 +16,12 @@ Returns a `text` node containing the text representation of `C0` ... `CN`.
 Returns the value of the variable `{String}`, or a reference to it if
 applicable. Structure members can be accessed by using `.` in `{String}`.
 
+### SEQUENCE | PROCEDURE
+{{< fatecode >}}(sequence {String}){{< /fatecode >}}
+
+Returns a `[SEQUENCE]` value corresponding to the sequence named `{String}`.
+Said sequence can be defined at a later point.
+
 ### STRUCTURE FIELD ACCESS
 {{< fatecode >}}{Structure Var Name}.{Field Name}{{< /fatecode >}}
 {{< fatecode >}}(field {String} [STRUCTURE VAR]){{< /fatecode >}}

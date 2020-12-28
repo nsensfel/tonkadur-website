@@ -140,7 +140,7 @@ see what events are available.
 #### Types
 The basic `string`, `int`, `float`, and `bool` types are what one would expect.
 
-`rich_text` corresponds to text decorations, see the text effect sub-section.
+`text` corresponds to text with decorations, see the text effect sub-section.
 
 Two collection types are available: `(list [TYPE])` is a list of `[TYPE]`
 elements, and `(set [COMPARABLE])` is a set of `[COMPARABLE]` elements.
@@ -155,7 +155,7 @@ issue](https://github.com/nsensfel/tonkadur/issues/6)).
 
 #### Player Choices
 Inputs from the players are limited to the `(player_choice ...)` instruction.
-It presents the player with `rich text` options to choose from, which execute
+It presents the player with `text` options to choose from, which execute
 an associated list of instructions if chosen.
 
 More complicated inputs, such as retrieving a `string` or an `int` from the

@@ -84,15 +84,15 @@ Returns the value held at the memory location `[ADDRESS]`.
 Returns an `[TYPE] ADDRESS` to a newly allocated memory element of
 type `[TYPE]`.
 
-## RICH TEXT
+## TEXT
 {{< fatecode >}}(newline){{< /fatecode >}}
-Returns a `RICH TEXT` value corresponding to a newline.
+Returns a `TEXT` value corresponding to a newline.
 
 {{< fatecode >}}(rich_text [S0 = STRING] ... [SN = STRING]){{< /fatecode >}}
-Returns a single value `RICH TEXT` representing the elements `S0` ... `S1`.
+Returns a single value `[TEXT]` representing the elements `S0` ... `S1`.
 
-{{< fatecode >}}(add_rich_text_effect ({string} [V0 = COMPUTATION] ... [VN = COMPUTATION]) [RICH TEXT]){{< /fatecode >}}
-Returns a `RICH TEXT` value of `[RICH TEXT]` with the given effect enabled.
+{{< fatecode >}}(add_rich_text_effect ({string} [V0 = COMPUTATION] ... [VN = COMPUTATION]) [TEXT]){{< /fatecode >}}
+Returns a `[TEXT]` value of `[TEXT]` with the given effect enabled.
 
 ## LAST USER CHOICE
 {{< fatecode >}}(get_last_user_choice){{< /fatecode >}}
