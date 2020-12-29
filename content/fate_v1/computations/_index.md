@@ -116,7 +116,7 @@ Highest value among the operands.
 
 {{< fatecode >}}(clamp [N0 = NUMBER] [N1 = NUMBER] [N2 = NUMBER]){{< /fatecode >}}
 
-Equivalent to `(min N0 (max N1 N2))`.
+Equivalent to `(max N0 (min N1 N2))`.
 
 
 {{< fatecode >}}(abs [NUMBER]){{< /fatecode >}}
