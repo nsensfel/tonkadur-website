@@ -2,13 +2,13 @@
 title: Player Choices
 ---
 Player choices are the main way to interact with the user, by presenting them
-with a list of `[RICH TEXT]` choices, and executing a list of instructions
+with a list of `[TEXT]` choices, and executing a list of instructions
 associated to the choice they have made.
 
 ### CHOICE OPTION
 {{< fatecode >}}([TEXT] [I0 = INSTRUCTION] ... [IN = INSTRUCTION]){{< /fatecode >}}
 
-Adds a choice showing `[RICH TEXT]` to the user, and executing `[I0]` ... `[IN]`
+Adds a choice showing `[TEXT]` to the user, and executing `[I0]` ... `[IN]`
 if chosen.
 
 ### CHOICE PROMPT

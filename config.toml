@@ -4,7 +4,7 @@ title = "Tonkadur"
 theme = "hugo-theme-learn"
 
 [params]
-   custom_css = ["css/prism.css"]
+   custom_css = ["css/prism.css", "css/collapse.css"]
    disableShortcutsTitle=true
    disableInlineCopyToClipBoard=true
    themeVariant = "glauque"

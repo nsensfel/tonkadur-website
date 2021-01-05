@@ -2,5 +2,5 @@
 title: "Declarations"
 menuTitle: "Declarations"
 chapter: true
-weight: 1
+weight: 2
 ---

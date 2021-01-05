@@ -1,0 +1,19 @@
+#sidebar .topics ul li
+{
+  display: none;
+}
+
+#sidebar .topics>ul>li
+{
+  display: block;
+}
+
+#sidebar .topics .parent>ul>li
+{
+  display: block;
+}
+
+#sidebar .topics .active>ul>li
+{
+  display: block;
+}

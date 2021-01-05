@@ -43,7 +43,7 @@ A Wyrd interpreter keeps track of:
 of any Wyrd type.
 * **The Program Counter:** an integer corresponding to the next Wyrd instruction
 to execute.
-* **Available Choices:** A list of `RICH_TEXT`.
+* **Available Choices:** A list of `TEXT`.
 * **Last Chosen Choice:** Index of the last chosen choice.
 * **The Code:** A list of instructions.
 

@@ -88,10 +88,10 @@ type `[TYPE]`.
 {{< fatecode >}}(newline){{< /fatecode >}}
 Returns a `TEXT` value corresponding to a newline.
 
-{{< fatecode >}}(rich_text [S0 = STRING] ... [SN = STRING]){{< /fatecode >}}
+{{< fatecode >}}(text [S0 = STRING] ... [SN = STRING]){{< /fatecode >}}
 Returns a single value `[TEXT]` representing the elements `S0` ... `S1`.
 
-{{< fatecode >}}(add_rich_text_effect ({string} [V0 = COMPUTATION] ... [VN = COMPUTATION]) [TEXT]){{< /fatecode >}}
+{{< fatecode >}}(add_text_effect ({string} [V0 = COMPUTATION] ... [VN = COMPUTATION]) [TEXT]){{< /fatecode >}}
 Returns a `[TEXT]` value of `[TEXT]` with the given effect enabled.
 
 ## LAST USER CHOICE

@@ -1,6 +1,6 @@
 ---
 title: Instructions
-weight: 3
+weight: 4
 ---
 Instructions do not return values, but modify the memory in some way or
 interact with the interpreter. Computations are valid instructions, and will be
