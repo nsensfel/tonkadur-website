@@ -1,5 +1,7 @@
 ---
 title: File Management
+menuTitle: Files
+weight: 7
 ---
 Fate narratives have one main file, but this file can use the contents of other
 files, and these files in turn can also use the contents of other files. Three

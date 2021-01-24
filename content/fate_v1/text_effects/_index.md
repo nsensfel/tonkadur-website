@@ -1,5 +1,6 @@
 ---
 title: Text Effects
+weight: 8
 ---
 Text effects are attributes that can be given to text elements. The
 effects themselves can take parameters. To avoid errors that would be difficult

@@ -1,6 +1,5 @@
 ---
-title: "Notations"
-menuTitle: "Notations"
+title: Notations
 weight: 1
 ---
 

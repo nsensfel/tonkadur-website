@@ -1,8 +1,9 @@
 ---
 title: Computations
-weight: 4
+weight: 2
 ---
-Computations are operations returning values. They do not modify the memory.
+Computations are values. They may read from the memory, but do not modify it
+(with a single exception).
 
 ### TEXT
 {{< fatecode >}}(text [C0 = COMPUTATION] ... [CN = COMPUTATION]){{< /fatecode >}}
@@ -35,8 +36,7 @@ Returns the value of the `{String}` field of the structure `[STRUCTURE]`.
 ### TEMPORARY VARIABLES
 {{< fatecode >}}(let (({V0 = String} [C0 = COMPUTATION]) ... ({VN = String} [CN = COMPUTATION])) [R = COMPUTATION]){{< /fatecode >}}
 
-Defines a hierarchical level and local variables `{V0}` ... `{VN}` with values
-`[C0]` ... `[CN]`, and returns the value of `[R]`.
+Defines a hierarchical level and local variables `V0` ... `VN` with values `C0` ... `CN`, and returns the value of `[R]`.
 
 ### CAST
 {{< fatecode >}}(cast [TYPE] [COMPUTATION*]){{< /fatecode >}}

@@ -1,5 +1,7 @@
 ---
 title: Sequences and Procedures
+menuTitle: Sequences
+weight: 6
 ---
 Sequences and procedures are the same thing. These are named lists of
 instructions and values, which can be called upon at any point where

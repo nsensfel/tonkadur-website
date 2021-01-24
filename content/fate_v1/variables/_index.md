@@ -1,5 +1,6 @@
 ---
 title: Variables
+weight: 3
 ---
 Variables are what hold values. Each variable has a type, which cannot be
 changed.
