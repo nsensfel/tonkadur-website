@@ -93,7 +93,7 @@ Examples of list types:
 
 Examples of lists:
 * {{< fatecode >}}(range 0 10 1){{< /fatecode >}}
-* {{< fatecode >}}(add 0 1 2 3 4 (default (list int))){< /fatecode >}}
+* {{< fatecode >}}(add 0 1 2 3 4 (default (list int))){{< /fatecode >}}
 * {{< fatecode >}}(add_all (range 0 10 1) (range -10 -1 1)){{< /fatecode >}}
 
 Sets are collections of elements with a comparable type. The comparables types,
@@ -110,7 +110,7 @@ Examples of set types:
 * {{< fatecode >}}(set string){{< /fatecode >}}
 
 Examples of sets:
-* {{< fatecode >}}(add 6 1 4 2 900 (default (set int))){< /fatecode >}}
+* {{< fatecode >}}(add 6 1 4 2 900 (default (set int))){{< /fatecode >}}
 * {{< fatecode >}}(add_all (range 0 10 1) (set int)){{< /fatecode >}}
 
 ### Lambda Expressions
@@ -189,5 +189,4 @@ Examples of computations returning a sequence or procedure value:
    (creature creature)
    ((list (ptr item)) inventory)
    (int money)
-)
-{{< /fatecode >}}
+){{< /fatecode >}}

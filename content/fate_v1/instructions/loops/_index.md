@@ -29,6 +29,6 @@ Executes `[I0]` ... `[IM]` for each member of `[COLLECTION]`, in order. The curr
 member is stored in a new local variable named `{String}`.
 
 ### BREAK
-{{< fatecode >}}(break){{< /fatecode >}}
+{{< fatecode >}}(break!){{< /fatecode >}}
 
 Exits the current loop.

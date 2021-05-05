@@ -59,6 +59,12 @@ Declares the local variable `{Identifier}` of type `[TYPE]`.
 {{< fatecode >}}(global [TYPE] {Identifier}){{< /fatecode >}}
 Declares the global variable `{Identifier}` of type `[TYPE]`.
 
+### EXTERNAL VARIABLE
+{{< fatecode >}}(external [TYPE] {Identifier}){{< /fatecode >}}
+Declares the external variable `{Identifier}` of type `[TYPE]`.
+External variables do not get initialized and are assumed to already have been
+set prior to the narrative starting.
+
 ## Example
 {{< fatecode >}}(local string name_of_dog)
 

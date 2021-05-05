@@ -21,7 +21,7 @@ Fate files are composed of three types of constructs:
   memory and return a value.
 * [Instructions](/fate_v1/instructions/), constructs that can modify the memory
   but do not return any values.
-* [Declarations](/fate_v1/declarations/), special instructions that are
+* Declarations, special instructions that are
   performed during compilation instead of during the execution.
 
 Other concepts in Fate include:

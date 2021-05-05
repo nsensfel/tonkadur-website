@@ -29,27 +29,27 @@ Adds all the elements of `[COLLECTION]` to `[COLLECTION VAR]`. If
 list.
 
 ### EMPTYING COLLECTIONS
-{{< fatecode >}}(clear [COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(clear! [COLLECTION]){{< /fatecode >}}
 
 Removes all members of `[COLLECTION]`.
 
 ### REMOVING MEMBER
-{{< fatecode >}}(remove [COMPUTATION] [COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(remove! [COMPUTATION] [COLLECTION]){{< /fatecode >}}
 
 Removes the first member of `[COLLECTION]` equal to `[COMPUTATION]`.
 
 ### REMOVING MEMBERS
-{{< fatecode >}}(remove_all [COMPUTATION] [COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(remove_all! [COMPUTATION] [COLLECTION]){{< /fatecode >}}
 
 Removes all instances of  `[COMPUTATION]` from `[COLLECTION]`.
 
 ### REMOVING AT INDEX
-{{< fatecode >}}(remove_at [INT] [COLLECTION]){{< /fatecode >}}
+{{< fatecode >}}(remove_at! [INT] [COLLECTION]){{< /fatecode >}}
 
 Removes the element of `[COLLECTION]` at `[INT]`.
 
 ### REVERSING LISTS
-{{< fatecode >}}(reverse [LIST]){{< /fatecode >}}
+{{< fatecode >}}(reverse! [LIST]){{< /fatecode >}}
 
 Reverses the order of the members of `[LIST]`.
 
