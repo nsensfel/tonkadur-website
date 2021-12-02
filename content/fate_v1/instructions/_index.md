@@ -23,7 +23,7 @@ Completes the execution of the current sequence.
 Completes the execution of the script.
 
 ### SET VALUE
-{{< fatecode >}}(set! [REFERENCE] [COMPUTATION]){{< /fatecode >}}
+{{< fatecode >}}(set! [X REFERENCE] [X COMPUTATION]){{< /fatecode >}}
 
 Gives the value `[COMPUTATION]` to `[REFERENCE]`.
 
@@ -39,7 +39,6 @@ once the visited sequence has completed.
 
 ### JUMP TO SEQUENCE
 {{< fatecode >}}(jump_to! {String} [C0 = COMPUTATION] ... [CN = COMPUTATION]){{< /fatecode >}}
-
 {{< fatecode >}}(jump_to! [SEQUENCE] [C0 = COMPUTATION] ... [CN = COMPUTATION]){{< /fatecode >}}
 
 Jumps to the sequence named `{String}` (or stored in `[SEQUENCE]`), with `C0`
@@ -48,6 +47,6 @@ defined. Jumping to a sequence means that the execution of the current sequence
 is replaced by that of the target sequence.
 
 ### INSTRUCTION LIST
-{{< fatecode >}}( [C0 = INSTRUCTION] ... [CN = INSTRUCTION]){{< /fatecode >}}
+{{< fatecode >}}([C0 = INSTRUCTION] ... [CN = INSTRUCTION]){{< /fatecode >}}
 
 Instruction corresponding to the execution of `[C0]` ... `[CN]` in order.

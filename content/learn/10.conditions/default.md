@@ -23,155 +23,150 @@ can be used both as instruction and computation. `if` is only for instructions.
 * `if` is only for instructions, and applies its content only if the condition
   is verified.
 
-All of these can be used within a `player_choice` to control what options are
+All of these can be used within a `player_choice!` to control what options are
 available.
+
+Let's start our changes by checking if this is the player's first visit to the
+smithy, as there is no need to give a detailed description of the place if it
+is not. We can also use conditions to check if the player is able to purchase
+items:
 
 **smithy.fate:**
 {{< fatecode >}}(fate_version 1)
 
 (require smithy_inventory.fate)
 
-(global (lambda text ((cons weapon int))) get_weapon_offer_label)
-(global (lambda text ((cons armor int))) get_armor_offer_label)
+;; Maybe it would be better to put this in a different file, but oh well...
+(global (lambda text ((cons #weapon int))) get_weapon_offer_label)
+(global (lambda text ((cons #armor int))) get_armor_offer_label)
 
-(set get_weapon_offer_label
+(set! get_weapon_offer_label
    (lambda
-      ( ((cons weapon int) offer) )
+      ( ((cons #weapon int) offer) )
       (let
          (
             (weapon (car offer))
             (price (cdr offer))
          )
          (text
-            Buy "(var weapon.name)" \(attack: (var weapon.attack),
-            precision: (var weapon.precision)\) for (var price) coins.
+            Buy "(var weapon.name)" (lp)attack: (var weapon.attack),
+            precision: (var weapon.precision)(rp) for (var price) coins.
          )
       )
    )
 )
 
-(set get_armor_offer_label
+(set! get_armor_offer_label
    (lambda
-      ( ((cons armor int) offer) )
+      ( ((cons #armor int) offer) )
       (let
          (
             (armor (car offer))
             (price (cdr offer))
          )
          (text
-            Buy "(var armor.name)" \(defense: (var armor.defense)\),
+            Buy "(var armor.name)" (lp)defense: (var armor.defense)(rp),
             for (var price) coins.
          )
       )
    )
 )
 
-(global bool has_visited_smithy)
-
-(set has_visited_smithy (false))
+(global bool has_visited_smithy (false))
 
 (define_sequence visit_smithy ()
-   (if (not (var has_visited_smithy))
+   (if (not has_visited_smithy)
       As you approach the smithy, you notice that no one's there. All the wares
       are out for selling. It's almost as if this story didn't need more
       examples of lengthy dialogues.
       (newline)
-      (set has_visited_smithy (true))
+      (set! has_visited_smithy (true))
    )
    You have (var hero.money) coins.
    (newline)
    What will you look at?
-   (player_choice
-      (
-         ( Let's see the weapons )
-         (jump_to see_weapons)
+   (player_choice!
+      (option ( Let's see the weapons )
+         (jump_to! see_weapons)
       )
-      (
-         ( Let's see the armors )
-         (jump_to see_armors)
+      (option ( Let's see the armors )
+         (jump_to! see_armors)
       )
-      (
-         ( Nothing, let's go back to the bar )
+      (option ( Nothing, let's go back to the bar )
       )
    )
 )
 
 (define_sequence see_weapons ()
-   ;; Still can be improved.
-   (player_choice
-      (
-         ( (eval get_weapon_offer_label (access smithy_weapons 0)) )
-         (visit buy_weapon (access smithy_weapons 0))
-         (jump_to visit_smithy)
+   ;; We'll improve it further once we get to loops.
+
+   (player_choice!
+      (option ( (eval get_weapon_offer_label smithy_weapons.0) )
+         (visit! buy_weapon smithy_weapons.0)
+         (jump_to! visit_smithy)
       )
-      (
-         ( (eval get_weapon_offer_label (access smithy_weapons 1)) )
-         (visit buy_weapon (access smithy_weapons 1))
-         (jump_to visit_smithy)
+      (option ( (eval get_weapon_offer_label smithy_weapons.1) )
+         (visit! buy_weapon smithy_weapons.1)
+         (jump_to! visit_smithy)
       )
-      (
-         ( Nevermind )
-         (jump_to visit_smithy)
+      (option ( Nevermind )
+         (jump_to! visit_smithy)
       )
    )
 )
 
 (define_sequence see_armors ()
-   ;; Still can be improved.
-   (player_choice
-      (
-         ( (eval get_armor_offer_label (access smithy_armors 0)) )
-         (visit buy_armor (access smithy_armors 0))
-         (jump_to visit_smithy)
+   ;; We'll improve it further once we get to loops.
+
+   (player_choice!
+      (option ( (eval get_armor_offer_label smithy_armors.0) )
+         (visit! buy_armor smithy_armors.0)
+         (jump_to! visit_smithy)
       )
-      (
-         ( (eval get_armor_offer_label (access smithy_armors 1)) )
-         (visit buy_armor (access smithy_armors 1))
-         (jump_to visit_smithy)
+      (option ( (eval get_armor_offer_label smithy_armors.1) )
+         (visit! buy_armor smithy_armors.1)
+         (jump_to! visit_smithy)
       )
-      (
-         ( Nevermind )
-         (jump_to visit_smithy)
+      (option ( Nevermind )
+         (jump_to! visit_smithy)
       )
    )
 )
 
-(define_sequence buy_weapon ( ((cons weapon int) weapon) )
-   ;; We can't even deny a sell yet...
+(define_sequence buy_weapon ( ((cons #weapon int) weapon) )
    (local int money_after)
 
-   (set money_after (- (var hero.money) (cdr weapon)))
+   (set! money_after (- hero.money (cdr weapon)))
 
-   (if_else (< (var money_after) 0)
+   (if_else (< money_after 0)
       (
          You can't afford that.
          (newline)
-         You would need (abs (var money_after)) more coins.
+         You would need (abs money_after) more coins.
       )
       (
-         (set hero.weapon (car weapon))
-         (set hero.money (var money_after))
+         (set! hero.weapon (car weapon))
+         (set! hero.money money_after)
          Equipped (var hero.weapon.name).
       )
    )
    (newline)
 )
 
-(define_sequence buy_armor ( ((cons armor int) armor) )
-   ;; We can't even deny a sell yet...
+(define_sequence buy_armor ( ((cons #armor int) armor) )
    (local int money_after)
 
-   (set money_after (- (var hero.money) (cdr armor)))
+   (set! money_after (- hero.money (cdr armor)))
 
-   (if_else (< (var money_after) 0)
+   (if_else (< money_after 0)
       (
          You can't afford that.
          (newline)
-         You would need (abs (var money_after)) more coins.
+         You would need (abs money_after) more coins.
       )
       (
-         (set hero.armor (car armor))
-         (set hero.money (var money_after))
+         (set! hero.armor (car armor))
+         (set! hero.money money_after)
          Equipped (var hero.armor.name).
       )
    )
@@ -179,56 +174,65 @@ available.
 )
 {{< /fatecode >}}
 
+To showcase a use of `cond`, we'll add some checks that tell the player how well
+they did:
 
-This was a first step toward cleaning up `smithy.fate`. Next, we'll use
-[conditions](/learn/conditions) to improve things further.
-
-----
-
-## Unchanged Files
-
-**data.fate:**
+**main.fate:**
 {{< fatecode >}}(fate_version 1)
 
-(declare_structure weapon
-   (text name)
-   (int attack)
-   (int precision)
+(require get_a_refill.fate)
+(require falling_asleep.fate)
+
+Once upon a time, starting a story with these words wasn't considered a cliche.
+Starting in a tavern might also not be seen as very original.  Having the main
+character be an street orphan, raised by some mysterious sage all to end up as
+a mercenary with an uncommonly strong sense of honor probably isn't going to
+lead to any praises for novelty either. Maybe you should drink to that.
+(newline)
+Or maybe you shouldn't. This isn't your first mug. Not your second either.
+Drinking to forget that you are a stereotypical hero isn't going to solve
+anything. Worse, the alcoholic trait is part of the image.
+(newline)
+As you contemplate your own pointless description, your gaze leaves what turns
+out to be an already empty glass in your hand and finds the barman.
+
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
+   )
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
+   )
 )
 
-(declare_structure armor
-   (text name)
-   (int defense)
+;; Let's analyze how well the player did
+(cond
+   ((> hero.weapon.attack 7)
+      Your feel ready to strike down any challenge.
+   )
+   ((>= hero.armor.defense 7)
+      Your feel invincible.
+   )
+   ((>= hero.money 50)
+      You feel good about having spent your coins sparingly.
+   )
+   ((true)
+      You feel like you wasted your evening.
+   )
 )
-
-(declare_structure character
-   (string name)
-   (int money)
-   (weapon weapon)
-   (armor armor)
-)
-
-(global character hero)
-
-(set_fields! hero.weapon
-   (name (text "Legendary" sword))
-   (attack 3)
-   (precision 50)
-)
-
-(set_fields! hero.armor
-   (name (text "Refined" attire))
-   (defense 1)
-)
-
-(set hero.money 42)
+(end!)
 {{< /fatecode >}}
+
+Lastly, we can have an example of `switch` by having the barman react to certain
+hero names. Note that `The barman looks surprised` corresponds to the default
+branch of that switch.
 
 **get_a_refill.fate:**
 {{< fatecode >}}(fate_version 1)
 
 (require data.fate)
 (require actions.fate)
+(require smithy.fate)
 
 (define_sequence lower_price_of_booze
    (
@@ -236,11 +240,8 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
       (int decrease)
    )
    Great! The price of booze just lowered from (at price_pointer)
-   (set (at price_pointer)
-      (-
-         (at price_pointer)
-         (var decrease)
-      )
+   (set! (at price_pointer)
+      (- (at price_pointer) decrease)
    )
    to (at price_pointer)!
 )
@@ -248,25 +249,35 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
 (define_sequence get_a_refill ()
    (local int price_of_booze)
 
-   (set price_of_booze 12)
+   (set! price_of_booze 12)
 
    Staring straight at the barman, you raise your glass and proclaim:
    (newline)
    "This soon-to-be world savior needs more booze!"
    (newline)
    The barman's lack of reaction is disappointing, but seeing the beer being
-   poured does help improve the mood.
+   poured does improve your mood.
    (newline)
    Satisfied, you hand the barman (var price_of_booze) copper coins.
-   (visit pay (var price_of_booze))
-   (newline)
+   (visit! pay price_of_booze)
    The barman sighs, then asks:
-   (prompt_string (ptr hero.name) 2 64 What is your name, then, hero?)
-   (var hero.name)?
+   (prompt_string! (ptr hero.name) 2 64 What is your name, then, hero?)
+   "(var hero.name)?"
    (newline)
-   The barman looks surprised.
+   (switch hero.name
+      (Fred
+         You brace for the inevitable mockery.
+      )
+      (Link
+         You show the back of your hand to the barman.
+      )
+      ((string Lancelot of Camelot)
+         You place halves of a coconut shell on the bar.
+      )
+      The barman looks surprised.
+   )
    (newline)
-   (visit lower_price_of_booze (ptr price_of_booze) 4)
+   (visit! lower_price_of_booze (ptr price_of_booze) 4)
    (newline)
    "I have heard of you, (var hero.name)," the barman exclaims, "I have a quest
    for you!"
@@ -277,7 +288,108 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
    (newline)
    "Take this pre-payment and head to the smithy."
    (newline)
+   (visit! visit_smithy)
 )
+{{< /fatecode >}}
+
+This was a first step toward cleaning up `smithy.fate`. Next, we'll use
+[loops](/learn/loops) to improve things further.
+
+----
+
+## Unchanged Files
+
+**data.fate:**
+{{< fatecode >}}(fate_version 1)
+
+(declare_structure #weapon
+   (text name)
+   (int attack)
+   (int precision)
+)
+
+(declare_structure #armor
+   (text name)
+   (int defense)
+)
+
+(declare_structure #character
+   (string name)
+   (int money)
+   (#weapon weapon)
+   (#armor armor)
+)
+
+(global #character hero)
+
+(struct:set_fields! hero.weapon
+   (name (text "Legendary" sword))
+   (attack 3)
+   (precision 50)
+)
+
+(struct:set_fields! hero.armor
+   (name (text "Refined" attire))
+   (defense 1)
+)
+
+(set! hero.money 200)
+
+{{< /fatecode >}}
+
+**get_a_refill.fate:**
+{{< fatecode >}}(fate_version 1)
+
+(require data.fate)
+(require actions.fate)
+(require smithy.fate)
+
+(define_sequence lower_price_of_booze
+   (
+      ((ptr int) price_pointer)
+      (int decrease)
+   )
+   Great! The price of booze just lowered from (at price_pointer)
+   (set! (at price_pointer)
+      (- (at price_pointer) decrease)
+   )
+   to (at price_pointer)!
+)
+
+(define_sequence get_a_refill ()
+   (local int price_of_booze)
+
+   (set! price_of_booze 12)
+
+   Staring straight at the barman, you raise your glass and proclaim:
+   (newline)
+   "This soon-to-be world savior needs more booze!"
+   (newline)
+   The barman's lack of reaction is disappointing, but seeing the beer being
+   poured does improve your mood.
+   (newline)
+   Satisfied, you hand the barman (var price_of_booze) copper coins.
+   (visit! pay price_of_booze)
+   The barman sighs, then asks:
+   (prompt_string! (ptr hero.name) 2 64 What is your name, then, hero?)
+   (var hero.name)?
+   (newline)
+   The barman looks surprised.
+   (newline)
+   (visit! lower_price_of_booze (ptr price_of_booze) 4)
+   (newline)
+   "I have heard of you, (var hero.name)," the barman exclaims, "I have a quest
+   for you!"
+   (newline)
+   It's your turn to sigh.
+   (newline)
+   The barman hands you a bag, and says:
+   (newline)
+   "Take this pre-payment and head to the smithy."
+   (newline)
+   (visit! visit_smithy)
+)
+
 {{< /fatecode >}}
 
 **actions.fate:**
@@ -286,9 +398,7 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
 (require data.fate)
 
 (define_sequence pay ( (int cost) )
-   (set hero_money
-      (- (var hero.money) (var cost))
-   )
+   (set! hero.money (- hero.money cost))
 )
 {{< /fatecode >}}
 
@@ -305,16 +415,19 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
    (newline)
    Upon waking up, your hard-trained reflexes inform you that someone stole all
    your money.
-   (set hero.money 0)
+   (set! hero.money 0)
    (newline)
-   This set-back was more than you could take. You give up on this barely
+   This set-back was more than you could handle. You give up on this barely
    coherent story.
-   (end)
+   (end!)
 )
 {{< /fatecode >}}
 
 **main.fate:**
 {{< fatecode >}}(fate_version 1)
+
+(require get_a_refill.fate)
+(require falling_asleep.fate)
 
 Once upon a time, starting a story with these words wasn't considered a cliche.
 Starting in a tavern might also not be seen as very original.  Having the main
@@ -329,21 +442,17 @@ anything. Worse, the alcoholic trait is part of the image.
 As you contemplate your own pointless description, your gaze leaves what turns
 out to be an already empty glass in your hand and finds the barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      (visit get_a_refill)
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
    )
-   (
-      ( Fall asleep )
-      (jump_to fall_asleep)
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
    )
 )
 
-(require get_a_refill.fate)
-(require falling_asleep.fate)
+(end!)
 
-(end)
 {{< /fatecode >}}
 
 **smithy_inventory.fate:**
@@ -351,12 +460,12 @@ out to be an already empty glass in your hand and finds the barman.
 
 (require data.fate)
 
-(global (list (cons weapon int)) smithy_weapons)
-(global (list (cons weapon int)) smithy_armors)
+(global (list (cons #weapon int)) smithy_weapons)
+(global (list (cons #armor int)) smithy_armors)
 
-(add!
+(list:add!
    (cons
-      (set_fields (default weapon)
+      (struct:set_fields (default #weapon)
          (name (text An Iron Rod))
          (attack 10)
          (precision 70)
@@ -365,9 +474,9 @@ out to be an already empty glass in your hand and finds the barman.
    )
    smithy_weapons
 )
-(add!
+(list:add!
    (cons
-      (set_fields (default weapon)
+      (struct:set_fields (default #weapon)
          (name (text A Magnificient Brick))
          (attack 6)
          (precision 90)
@@ -377,19 +486,16 @@ out to be an already empty glass in your hand and finds the barman.
    smithy_weapons
 )
 
-(add!
+(list:add!
    (cons
-      (set_fields (default armor)
+      (struct:set_fields (default #armor)
          (name (text A raincoat?!))
          (defense 7)
       )
       160
    )
-   smithy_armors
-)
-(add!
    (cons
-      (set_fields (default armor)
+      (struct:set_fields (default #armor)
          (name (text A nice cape))
          (defense 3)
       )

@@ -24,11 +24,10 @@ Given a pointer `p`, the variable being pointed to can be referred to using
 **data.fate:**
 {{< fatecode >}}(fate_version 1)
 
-(global int hero_money)
+(global int hero_money 42)
 (global string hero_name)
-
-(set hero_money 42)
 {{< /fatecode >}}
+
 **get_a_refill.fate:**
 {{< fatecode >}}(fate_version 1)
 
@@ -41,11 +40,8 @@ Given a pointer `p`, the variable being pointed to can be referred to using
       (int decrease)
    )
    Great! The price of booze just lowered from (at price_pointer)
-   (set (at price_pointer)
-      (-
-         (at price_pointer)
-         (var decrease)
-      )
+   (set! (at price_pointer)
+      (- (at price_pointer) decrease)
    )
    to (at price_pointer)!
 )
@@ -53,25 +49,24 @@ Given a pointer `p`, the variable being pointed to can be referred to using
 (define_sequence get_a_refill ()
    (local int price_of_booze)
 
-   (set price_of_booze 12)
+   (set! price_of_booze 12)
 
    Staring straight at the barman, you raise your glass and proclaim:
    (newline)
    "This soon-to-be world savior needs more booze!"
    (newline)
    The barman's lack of reaction is disappointing, but seeing the beer being
-   poured does help improve the mood.
+   poured does improve your mood.
    (newline)
    Satisfied, you hand the barman (var price_of_booze) copper coins.
-   (visit pay (var price_of_booze))
-   (newline)
+   (visit! pay price_of_booze)
    The barman sighs, then asks:
-   (prompt_string (ptr hero_name) 2 64 What is your name, then, hero?)
+   (prompt_string! (ptr hero_name) 2 64 What is your name, then, hero?)
    (var hero_name)?
    (newline)
    The barman looks surprised.
    (newline)
-   (visit lower_price_of_booze (ptr price_of_booze) 4)
+   (visit! lower_price_of_booze (ptr price_of_booze) 4)
    (newline)
    "I have heard of you, (var hero_name)," the barman exclaims, "I have a quest
    for you!"
@@ -85,7 +80,7 @@ Given a pointer `p`, the variable being pointed to can be referred to using
 )
 {{< /fatecode >}}
 
-* `(prompt_string (ptr hero_name) 2 64 What is your name, then, hero?)` prompts
+* `(prompt_string! (ptr hero_name) 2 64 What is your name, then, hero?)` prompts
   the player with `What is your name, then, hero?` and expects a string input
   with a size between `2` and `64` characters. This input is stored at `(ptr
   hero_name)`, which means that `hero_name` takes that value.
@@ -106,10 +101,9 @@ sheet, so [let's create one](/learn/structures).
 (require data.fate)
 
 (define_sequence pay ( (int cost) )
-   (set hero_money
-      (- (var hero_money) (var cost))
-   )
+   (set! hero_money (- hero_money cost))
 )
+
 {{< /fatecode >}}
 
 **falling_asleep.fate:**
@@ -125,16 +119,19 @@ sheet, so [let's create one](/learn/structures).
    (newline)
    Upon waking up, your hard-trained reflexes inform you that someone stole all
    your money.
-   (set hero_money 0)
+   (set! hero_money 0)
    (newline)
-   This set-back was more than you could take. You give up on this barely
+   This set-back was more than you could handle. You give up on this barely
    coherent story.
-   (end)
+   (end!)
 )
 {{< /fatecode >}}
 
 **main.fate:**
 {{< fatecode >}}(fate_version 1)
+
+(require get_a_refill.fate)
+(require falling_asleep.fate)
 
 Once upon a time, starting a story with these words wasn't considered a cliche.
 Starting in a tavern might also not be seen as very original.  Having the main
@@ -149,19 +146,14 @@ anything. Worse, the alcoholic trait is part of the image.
 As you contemplate your own pointless description, your gaze leaves what turns
 out to be an already empty glass in your hand and finds the barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      (visit get_a_refill)
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
    )
-   (
-      ( Fall asleep )
-      (jump_to fall_asleep)
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
    )
 )
 
-(require get_a_refill.fate)
-(require falling_asleep.fate)
-
-(end)
+(end!)
 {{< /fatecode >}}

@@ -15,17 +15,17 @@ Valid separators are spaces, tabs, and line returns. Having multiple separators
 between two elements is the same as having a single one.
 
 ### Comments
-Comments are line without anything but any number of separators before `;;`.
-Every that follows the `;;` on that line is considered to be a comment.
+Every that follows a `;;` on a line is considered to be a comment.
 {{< fatecode >}};; You can comment here
 (fate_version 1)
-     ;; Separators before the ';;' are also okay.
-something ;; This is not a comment, since the line contains something else.
+something ;; This very sentence is also a comment.
 ;; Multi line
 ;; comments need a ';;' on
 ;; every line.
 (end)
 {{< /fatecode >}}
+
+To write the `;;` string literal in fate, the syntax is `(2;)`.
 
 ### Literals
 A literal is a hard-coded string. Basically, writing `42` corresponds to a
@@ -43,6 +43,7 @@ Now, the rules about separators and parentheses being absent in literals is a
 bit problematic for strings. To remedy this:
 * Writing `(lp)` counts as writing the literal `(`.
 * Writing `(rp)` counts as writing the literal `)`.
+* Writing `(2;)` counts as writing the literal `;;`.
 * Writing `(sp)` counts as writing the literal ` ` (space).
 
 Thus, you cannot write:
@@ -53,10 +54,10 @@ But you can write:
 And it will be a bunch of `{STRING}` literals.
 
 ### Identifier
-`{IDENTIFIER}`: Non-empty string literal without space characters, `.`, `)`,
-or `(`.  Line returns and tabs are considered to be space characters. Strings
-that correspond to valid numbers (e.g. `42`) are likely to cause issues and
-should thus be avoided.
+`{IDENTIFIER}`: Non-empty string literal without space characters, `;`, `.`,
+`)`, or `(`.  Line returns and tabs are considered to be space characters.
+Strings that correspond to valid numbers (e.g. `42`) are likely to cause issues
+and should thus be avoided.
 
 Examples of valid identifiers:
 * {{< fatecode >}}i{{< /fatecode >}}
@@ -64,7 +65,6 @@ Examples of valid identifiers:
 * {{< fatecode >}}変数{{< /fatecode >}}
 * {{< fatecode >}}80x9!{{< /fatecode >}}
 * {{< fatecode >}}pseudo::namespacing<$confusion>**a**{{< /fatecode >}}
-
 
 ### Value
 `[INT]`: Computation (or literal) returning a value of type `INT`. Similarly,
@@ -81,7 +81,8 @@ as the `[STRING]` literal `my_var`, and to get the value of a variable, you
 would need to write something like `(var my_var)`. `[STRING]` automatically
 implies `[STRING*]`.
 
-If need be, `(string {STRING})`
+If need be, `(string {STRING})` lets you specify that you want `{STRING}` to be
+a string without any ambiguity.
 
 Examples of valid value:
 * Values for `[INT]`:

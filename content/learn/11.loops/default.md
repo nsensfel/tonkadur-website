@@ -1,20 +1,31 @@
 ---
-menuTitle: Lambda Functions
-title: "Lambda Functions"
-weight: 9
+menuTitle: Loops
+title: "Doing Things Over and Over"
+weight: 11
 ---
-In [the previous step](/learn/collections), we added collections, which made
-having large amounts of data possible. We also ended up with a really ugly file,
-`smithy.fate`, which had way too much code to be readable. We'll start by
-removing the label generation sequences. Instead, we'll use lambda functions.
+[The previous step](/learn/conditions) introduced conditions, making it
+possible to change the flow of execution according to the value of variables.
+In this step, we look at loops, which will make instructions be executed a
+certain number time depending on a condition, or just for each element of a
+collection.
 
-A lambda function is computation description that can be stored for later use.
-It can also take parameters. Since it's a computation, it cannot alter the
-memory by itself, nor can it contain any instructions.
+Fate offers the following loop constructs:
+* `while`, to execute instructions if and as many time as a condition is
+   verified.
+* `do_while`, to execute instructions at least once, then as many time as a
+   condition is verified.
+* `for`, a loop that has pre-instructions, a condition to verify before each
+   execution of the main body, the main body of instructions itself, then
+   post-instructions, which are executed before checking the condition.
+* `for_each`, a loop that executes for each member of a collection.
+
+The `for_each` loops can also be used within a `player_choice!` to control what
+options are available.
+
+Let's change how armors and weapons are displayed to the player:
 
 **smithy.fate:**
 {{< fatecode >}}(fate_version 1)
-
 (require smithy_inventory.fate)
 
 ;; Maybe it would be better to put this in a different file, but oh well...
@@ -53,13 +64,16 @@ memory by itself, nor can it contain any instructions.
    )
 )
 
+(global bool has_visited_smithy (false))
+
 (define_sequence visit_smithy ()
-   ;; This thing is going to show up every time, which isn't great.
-   As you approach the smithy, you notice that no one's there. All the wares
-   are out for selling. It's almost as if this story didn't need more examples
-   of lengthy dialogues.
-   (newline)
-   ;; We'll want to start here the next time we enter this sequence.
+   (if (not has_visited_smithy)
+      As you approach the smithy, you notice that no one's there. All the wares
+      are out for selling. It's almost as if this story didn't need more
+      examples of lengthy dialogues.
+      (newline)
+      (set! has_visited_smithy (true))
+   )
    You have (var hero.money) coins.
    (newline)
    What will you look at?
@@ -76,70 +90,158 @@ memory by itself, nor can it contain any instructions.
 )
 
 (define_sequence see_weapons ()
-   ;; We'll improve it further once we get to loops.
-
    (player_choice!
-      (option ( (eval get_weapon_offer_label smithy_weapons.0) )
-         (visit! buy_weapon smithy_weapons.0)
-         (jump_to! visit_smithy)
+      (foreach smithy_weapons weapon
+         (option ( (eval get_weapon_offer_label weapon) )
+            (visit! buy_weapon weapon)
+         )
       )
-      (option ( (eval get_weapon_offer_label smithy_weapons.1) )
-         (visit! buy_weapon smithy_weapons.1)
-         (jump_to! visit_smithy)
-      )
-      (option ( Nevermind )
-         (jump_to! visit_smithy)
-      )
+      (option ( Nevermind ) )
    )
+   (jump_to! visit_smithy)
 )
 
 (define_sequence see_armors ()
-   ;; We'll improve it further once we get to loops.
+   ;; Not as good as a for_each in this case, but let's use a for to show how
+   ;; it can be done.
 
    (player_choice!
-      (option ( (eval get_armor_offer_label smithy_armors.0) )
-         (visit! buy_armor smithy_armors.0)
-         (jump_to! visit_smithy)
+      (for
+         ( (i 0) )
+         (< i (list:size smithy_armors))
+         ( (i (+ i 1)) )
+
+         (option ( (eval get_armor_offer_label (list:access i smithy_armors)) )
+            (visit! buy_armor (list:access i smithy_armors))
+         )
       )
-      (option ( (eval get_armor_offer_label smithy_armors.1) )
-         (visit! buy_armor smithy_armors.1)
-         (jump_to! visit_smithy)
-      )
-      (option ( Nevermind )
-         (jump_to! visit_smithy)
-      )
+      (option ( Nevermind ) )
    )
+   (jump_to! visit_smithy)
 )
 
 (define_sequence buy_weapon ( ((cons #weapon int) weapon) )
-   ;; We still can't even deny a sell...
-   (set! hero.weapon (car weapon))
-   Equipped (var hero.weapon.name).
+   (local int money_after)
+
+   (set! money_after (- hero.money (cdr weapon)))
+
+   (if_else (< money_after 0)
+      (
+         You can't afford that.
+         (newline)
+         You would need (abs money_after) more coins.
+      )
+      (
+         (set! hero.weapon (car weapon))
+         (set! hero.money money_after)
+         Equipped (var hero.weapon.name).
+      )
+   )
    (newline)
 )
 
 (define_sequence buy_armor ( ((cons #armor int) armor) )
-   ;; We still can't even deny a sell...
-   (set! hero.armor (car armor))
-   Equipped (var hero.armor.name).
+   (local int money_after)
+
+   (set! money_after (- hero.money (cdr armor)))
+
+   (if_else (< money_after 0)
+      (
+         You can't afford that.
+         (newline)
+         You would need (abs money_after) more coins.
+      )
+      (
+         (set! hero.armor (car armor))
+         (set! hero.money money_after)
+         Equipped (var hero.armor.name).
+      )
+   )
    (newline)
 )
 {{< /fatecode >}}
 
-* `(lambda return_type (param_type0 param_type1 ...))` is the type corresponding
-  to a lambda function returning a value of type `return_type` and taking as
-  parameters values of types `param_type0`, `param_type1`, ...
-* `(eval variable_name param0 param1 ...)` computes and returns the result of
-  the lambda function stored in `variable_name` by giving it as parameter the
-  values `param0`, `param1`, ...
-* `(let ( (name0 val0) ... ) computation)` computes and returns `computation` as
-  if `name0` was a defined variable of value `val0`.
+Let's also look at a loop not within a `player_choice!` construct. We'll have
+the player try to count sheeps:
 
-Lambda functions are *very* useful. They can be used to manipulate lists in many
-ways. They can also be used to abstract away some complicated computation.
+**falling_asleep.fate:**
+{{< fatecode >}}(fate_version 1)
+(require data.fate)
 
-This was a first step toward cleaning up `smithy.fate`. Next, we'll use
-[conditions](/learn/conditions) to improve things further.
+(global (list string) affirmative_messages)
+
+(list:add!
+   Indeed.
+   (string Sounds about right.)
+   Yes.
+   Agreed.
+   (string That's correct.)
+   True.
+   Undoubtedly.
+   Certainly.
+   (string Without a doubt.)
+   Correct.
+   Affirmative.
+   affirmative_messages
+)
+
+(global (lambda string ()) get_affirmative_message
+   (lambda ()
+      (list:access
+         (rand 0 (- (list:size affirmative_messages) 1))
+         affirmative_messages
+      )
+   )
+)
+
+(define_sequence count_sheeps ()
+   (local int sheeps 0)
+
+   You start imagining some pasture with no sheeps.
+
+   (while (< sheeps 100)
+      (local int player_guess)
+      (local int new_sheeps (rand 1 20))
+
+      (if_else (= new_sheeps 1)
+         ( A single sheep appears. )
+         ( (var new_sheeps) sheeps appear. )
+      )
+
+      (set! sheeps (+ sheeps new_sheeps))
+
+      (prompt_integer! (ptr player_guess) 0 120 How many sheeps are there now?)
+
+      (if_else (= sheeps player_guess)
+         (eval get_affirmative_message)
+         (
+            No. It was (var sheeps), you're pretty sure. The doubt wakes you up.
+            (newline)
+            (break!)
+         )
+      )
+      (newline)
+   )
+)
+
+(define_sequence fall_asleep ()
+   Deciding to break away from the expected storyline, you attempt to fall
+   asleep. It's not easy, though. Maybe counting sheeps would help?
+
+   (visit! count_sheeps)
+   (newline)
+   Upon waking up, your hard-trained reflexes inform you that someone stole all
+   your money.
+   (set! hero.money 0)
+   (newline)
+   This set-back was more than you could handle. You give up on this barely
+   coherent story.
+   (end!)
+)
+{{< /fatecode >}}
+
+[The next step of this tutorial](/learn/going_deeper) goes deeper into all the
+concepts that were already explored.
 
 ----
 
@@ -179,7 +281,8 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
    (defense 1)
 )
 
-(set! hero.money 42)
+(set! hero.money 200)
+
 {{< /fatecode >}}
 
 **get_a_refill.fate:**
@@ -217,9 +320,20 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
    (visit! pay price_of_booze)
    The barman sighs, then asks:
    (prompt_string! (ptr hero.name) 2 64 What is your name, then, hero?)
-   (var hero.name)?
+   "(var hero.name)?"
    (newline)
-   The barman looks surprised.
+   (switch hero.name
+      (Fred
+         You brace for the inevitable mockery.
+      )
+      (Link
+         You show the back of your hand to the barman.
+      )
+      ((string Lancelot of Camelot)
+         You place halves of a coconut shell on the bar.
+      )
+      The barman looks surprised.
+   )
    (newline)
    (visit! lower_price_of_booze (ptr price_of_booze) 4)
    (newline)
@@ -243,27 +357,6 @@ This was a first step toward cleaning up `smithy.fate`. Next, we'll use
 
 (define_sequence pay ( (int cost) )
    (set! hero.money (- hero.money cost))
-)
-{{< /fatecode >}}
-
-**falling_asleep.fate:**
-{{< fatecode >}}(fate_version 1)
-
-(require data.fate)
-
-(define_sequence fall_asleep ()
-   Deciding to break away from the expected storyline, you promptly fall
-   asleep.
-   (newline)
-   ...
-   (newline)
-   Upon waking up, your hard-trained reflexes inform you that someone stole all
-   your money.
-   (set! hero.money 0)
-   (newline)
-   This set-back was more than you could handle. You give up on this barely
-   coherent story.
-   (end!)
 )
 {{< /fatecode >}}
 
@@ -295,6 +388,21 @@ out to be an already empty glass in your hand and finds the barman.
    )
 )
 
+;; Let's analyze how well the player did
+(cond
+   ((> hero.weapon.attack 7)
+      Your feel ready to strike down any challenge.
+   )
+   ((>= hero.armor.defense 7)
+      Your feel invincible.
+   )
+   ((>= hero.money 50)
+      You feel good about having spent your coins sparingly.
+   )
+   ((true)
+      You feel like you wasted your evening.
+   )
+)
 (end!)
 {{< /fatecode >}}
 

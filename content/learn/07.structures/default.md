@@ -17,47 +17,52 @@ Fields of a structure can be accessed in two ways: using the
 If `struct_ptr` is a pointer to a structure, `struct_ptr.field_name` will also
 work.
 
-To set the value of a structure's fields, one can use the `set` instruction or,
+To set the value of a structure's fields, one can use the `set!` instruction or,
 to set multiple fields at once, the `set_fields!` one. Note that omitting the
 `!` at the end of `set_fields` is also valid Fate, but performs a computation
 instead of a instruction: the structure is not modified, but a copy with the
 modifications performed is returned.
 
+The name of user-defined types are expected to start with `#`. This ensures
+backward compatibility if a type with a similar name is introduced in a future
+(non-major) version of Fate. A warning will be raised during compilation if this
+convention is not upheld.
+
 **data.fate:**
 {{< fatecode >}}(fate_version 1)
 
-(declare_structure weapon
+(declare_structure #weapon
    (text name)
    (int attack)
    (int precision)
 )
 
-(declare_structure armor
+(declare_structure #armor
    (text name)
    (int defense)
 )
 
-(declare_structure character
+(declare_structure #character
    (string name)
    (int money)
-   (weapon weapon)
-   (armor armor)
+   (#weapon weapon)
+   (#armor armor)
 )
 
-(global character hero)
+(global #character hero)
 
-(set_fields! hero.weapon
+(struct:set_fields! hero.weapon
    (name (text "Legendary" sword))
    (attack 3)
    (precision 50)
 )
 
-(set_fields! hero.armor
+(struct:set_fields! hero.armor
    (name (text "Refined" attire))
    (defense 1)
 )
 
-(set hero.money 42)
+(set! hero.money 42)
 {{< /fatecode >}}
 
 * `(text "Refined" attire)` generates a `text` value containing a textual
@@ -87,11 +92,8 @@ collection is available at the smithy](/learn/collections).
       (int decrease)
    )
    Great! The price of booze just lowered from (at price_pointer)
-   (set (at price_pointer)
-      (-
-         (at price_pointer)
-         (var decrease)
-      )
+   (set! (at price_pointer)
+      (- (at price_pointer) decrease)
    )
    to (at price_pointer)!
 )
@@ -99,25 +101,24 @@ collection is available at the smithy](/learn/collections).
 (define_sequence get_a_refill ()
    (local int price_of_booze)
 
-   (set price_of_booze 12)
+   (set! price_of_booze 12)
 
    Staring straight at the barman, you raise your glass and proclaim:
    (newline)
    "This soon-to-be world savior needs more booze!"
    (newline)
    The barman's lack of reaction is disappointing, but seeing the beer being
-   poured does help improve the mood.
+   poured does improve your mood.
    (newline)
    Satisfied, you hand the barman (var price_of_booze) copper coins.
-   (visit pay (var price_of_booze))
-   (newline)
+   (visit! pay price_of_booze)
    The barman sighs, then asks:
-   (prompt_string (ptr hero.name) 2 64 What is your name, then, hero?)
+   (prompt_string! (ptr hero.name) 2 64 What is your name, then, hero?)
    (var hero.name)?
    (newline)
    The barman looks surprised.
    (newline)
-   (visit lower_price_of_booze (ptr price_of_booze) 4)
+   (visit! lower_price_of_booze (ptr price_of_booze) 4)
    (newline)
    "I have heard of you, (var hero.name)," the barman exclaims, "I have a quest
    for you!"
@@ -137,14 +138,12 @@ collection is available at the smithy](/learn/collections).
 (require data.fate)
 
 (define_sequence pay ( (int cost) )
-   (set hero_money
-      (- (var hero.money) (var cost))
-   )
+   (set! hero.money (- hero.money cost))
 )
+
 {{< /fatecode >}}
 
 **falling_asleep.fate:**
-
 {{< fatecode >}}(fate_version 1)
 
 (require data.fate)
@@ -157,16 +156,20 @@ collection is available at the smithy](/learn/collections).
    (newline)
    Upon waking up, your hard-trained reflexes inform you that someone stole all
    your money.
-   (set hero.money 0)
+   (set! hero.money 0)
    (newline)
-   This set-back was more than you could take. You give up on this barely
+   This set-back was more than you could handle. You give up on this barely
    coherent story.
-   (end)
+   (end!)
 )
 {{< /fatecode >}}
 
 **main.fate:**
 {{< fatecode >}}(fate_version 1)
+
+(require get_a_refill.fate)
+(require falling_asleep.fate)
+
 
 Once upon a time, starting a story with these words wasn't considered a cliche.
 Starting in a tavern might also not be seen as very original.  Having the main
@@ -181,19 +184,14 @@ anything. Worse, the alcoholic trait is part of the image.
 As you contemplate your own pointless description, your gaze leaves what turns
 out to be an already empty glass in your hand and finds the barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      (visit get_a_refill)
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
    )
-   (
-      ( Fall asleep )
-      (jump_to fall_asleep)
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
    )
 )
 
-(require get_a_refill.fate)
-(require falling_asleep.fate)
-
-(end)
+k(end!)
 {{< /fatecode >}}

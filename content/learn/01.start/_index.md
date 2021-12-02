@@ -23,7 +23,7 @@ image.
 As you contemplate your own pointless description, your gaze leaves
 what turns out to be an already empty glass in your hand and finds the
 barman.
-(end)
+(end!)
 {{< /fatecode >}}
 
 This is a very minimal story in Fate. Let's look at what is it made of:
@@ -36,7 +36,7 @@ This is a very minimal story in Fate. Let's look at what is it made of:
   makes indentation have no effect on the output text. Furthermore such
   characters preceding text are ignored.
 * `(newline)` inserts a newline in the output.
-* `(end)` signals the end of the story. It needs to be there.
+* `(end!)` signals the end of the story. It needs to be there.
 
 With this, you know how to make a static, purely textual story in Fate. Our poor
 protagonist needs a refill, so we need to introduce

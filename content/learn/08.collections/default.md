@@ -24,12 +24,12 @@ Let's add a new file, `smithy_inventory.fate`:
 
 (require data.fate)
 
-(global (list (cons weapon int)) smithy_weapons)
-(global (list (cons weapon int)) smithy_armors)
+(global (list (cons #weapon int)) smithy_weapons)
+(global (list (cons #armor int)) smithy_armors)
 
-(add!
+(list:add!
    (cons
-      (set_fields (default weapon)
+      (struct:set_fields (default #weapon)
          (name (text An Iron Rod))
          (attack 10)
          (precision 70)
@@ -38,9 +38,9 @@ Let's add a new file, `smithy_inventory.fate`:
    )
    smithy_weapons
 )
-(add!
+(list:add!
    (cons
-      (set_fields (default weapon)
+      (struct:set_fields (default #weapon)
          (name (text A Magnificient Brick))
          (attack 6)
          (precision 90)
@@ -50,19 +50,16 @@ Let's add a new file, `smithy_inventory.fate`:
    smithy_weapons
 )
 
-(add!
+(list:add!
    (cons
-      (set_fields (default armor)
+      (struct:set_fields (default #armor)
          (name (text A raincoat?!))
          (defense 7)
       )
       160
    )
-   smithy_armors
-)
-(add!
    (cons
-      (set_fields (default armor)
+      (struct:set_fields (default #armor)
          (name (text A nice cape))
          (defense 3)
       )
@@ -75,8 +72,9 @@ Let's add a new file, `smithy_inventory.fate`:
 We'll also need the actual smithy scene, so let's put in another file,
 `smithy.fate`.
 
-**NOTE:** Don't worry if it looks awful at the moment, the next chapters are
-going to introduce a lot of things to make it *much*, *much* easier to write.
+**IMPORTANT NOTE:** Don't worry if it looks awful at the moment, the next
+chapters are going to introduce a lot of things to make it *much*, *much*
+easier to write.
 
 **smithy.fate:**
 {{< fatecode >}}(fate_version 1)
@@ -93,17 +91,14 @@ going to introduce a lot of things to make it *much*, *much* easier to write.
    You have (var hero.money) coins.
    (newline)
    What will you look at?
-   (player_choice
-      (
-         ( Let's see the weapons )
-         (jump_to see_weapons)
+   (player_choice!
+      (option ( Let's see the weapons )
+         (jump_to! see_weapons)
       )
-      (
-         ( Let's see the armors )
-         (jump_to see_armors)
+      (option ( Let's see the armors )
+         (jump_to! see_armors)
       )
-      (
-         ( Nothing, let's go back to the bar )
+      (option ( Nothing, let's go back to the bar )
       )
    )
 )
@@ -114,29 +109,26 @@ going to introduce a lot of things to make it *much*, *much* easier to write.
    (local text weapon_a_label)
    (local text weapon_b_label)
 
-   (visit get_weapon_label
-      (access smithy_weapons 0)
+   (visit! get_weapon_label
+      (list:access 0 smithy_weapons)
       (ptr weapon_a_label)
    )
-   (visit get_weapon_label
-      (access smithy_weapons 1)
+   (visit! get_weapon_label
+      smithy_weapons.1
       (ptr weapon_b_label)
    )
 
-   (player_choice
-      (
-         ( (var weapon_a_label) )
-         (visit buy_weapon (access smithy_weapons 0))
-         (jump_to visit_smithy)
+   (player_choice!
+      (option ( (var weapon_a_label) )
+         (visit! buy_weapon smithy_weapons.0)
+         (jump_to! visit_smithy)
       )
-      (
-         ( (var weapon_a_label) )
-         (visit buy_weapon (access smithy_weapons 1))
-         (jump_to visit_smithy)
+      (option ( (var weapon_b_label) )
+         (visit! buy_weapon (list:access 1 smithy_weapons))
+         (jump_to! visit_smithy)
       )
-      (
-         ( Nevermind )
-         (jump_to visit_smithy)
+      (option ( Nevermind )
+         (jump_to! visit_smithy)
       )
    )
 )
@@ -147,29 +139,26 @@ going to introduce a lot of things to make it *much*, *much* easier to write.
    (local text armor_a_label)
    (local text armor_b_label)
 
-   (visit get_armor_label
-      (access smithy_armors 0)
+   (visit! get_armor_label
+      smithy_armors.0
       (ptr armor_a_label)
    )
-   (visit get_armor_label
-      (access smithy_armors 1)
+   (visit! get_armor_label
+      smithy_armors.1
       (ptr armor_b_label)
    )
 
-   (player_choice
-      (
-         ( (var armor_a_label) )
-         (visit buy_armor (access smithy_armors 0))
-         (jump_to visit_smithy)
+   (player_choice!
+      (option ( (var armor_a_label) )
+         (visit! buy_armor smithy_armors.0)
+         (jump_to! visit_smithy)
       )
-      (
-         ( (var armor_a_label) )
-         (visit buy_armor (access smithy_armors 1))
-         (jump_to visit_smithy)
+      (option ( (var armor_b_label) )
+         (visit! buy_armor smithy_armors.1)
+         (jump_to! visit_smithy)
       )
-      (
-         ( Nevermind )
-         (jump_to visit_smithy)
+      (option ( Nevermind )
+         (jump_to! visit_smithy)
       )
    )
 )
@@ -177,19 +166,19 @@ going to introduce a lot of things to make it *much*, *much* easier to write.
 ;; A terrible way to get labels
 (define_sequence get_weapon_label
    (
-      ((cons weapon int) weapon_offer)
+      ((cons #weapon int) weapon_offer)
       ((ptr text) label)
    )
-   (local weapon weapon)
+   (local #weapon weapon)
    (local int price)
 
-   (set weapon (car weapon_offer))
-   (set price (cdr weapon_offer))
+   (set! weapon (car weapon_offer))
+   (set! price (cdr weapon_offer))
 
-   (set (at label)
-      (
-          Buy "(var weapon.name)" \(attack: (var weapon.attack),
-          precision: (var weapon.precision)\) for (var price) coins.
+   (set! (at label)
+      (text
+          Buy "(var weapon.name)" (lp)attack: (var weapon.attack),
+          precision: (var weapon.precision)(rp) for (var price) coins.
       )
    )
 )
@@ -197,46 +186,54 @@ going to introduce a lot of things to make it *much*, *much* easier to write.
 ;; A terrible way to get labels
 (define_sequence get_armor_label
    (
-      ((cons armor int) armor_offer)
+      ((cons #armor int) armor_offer)
       ((ptr text) label)
    )
-   (local armor armor)
+   (local #armor armor)
    (local int price)
 
-   (set armor (car armor_offer))
-   (set price (cdr armor_offer))
+   (set! armor (car armor_offer))
+   (set! price (cdr armor_offer))
 
-   (set (at label)
-      (
-          Buy "(var armor.name)" \(defense: (var armor.defense)\),
+   (set! (at label)
+      (text
+          Buy "(var armor.name)" (lp)defense: (var armor.defense)(rp),
           for (var price) coins.
       )
    )
 )
 
-(define_sequence buy_weapon ( ((cons weapon int) weapon) )
+(define_sequence buy_weapon ( ((cons #weapon int) weapon) )
    ;; We can't even deny a sell yet...
-   (set hero.weapon (car weapon))
+   (set! hero.weapon (car weapon))
    Equipped (var hero.weapon.name).
    (newline)
 )
 
-(define_sequence buy_armor ( ((cons armor int) armor) )
+(define_sequence buy_armor ( ((cons #armor int) armor) )
    ;; We can't even deny a sell yet...
-   (set hero.armor (car armor))
+   (set! hero.armor (car armor))
    Equipped (var hero.armor.name).
    (newline)
 )
 {{< /fatecode >}}
 
+Now, add `(require smithy.fate)` at the start of the **get_a_refill.fate**
+file, then add `(visit! visit_smithy)` at the end of the `get_a_refill`
+sequence, so that our hero indeed goes to visit this great shop.
+
 * `(list (cons weapon int))` indicates a list of `weapon` and `int` pairs.
-* `(add! something smithy_weapons)` adds `something` to the `smithy_weapons`
-  collection. Without the `!`, this would be a computation returning a copy of
-  `smithy_weapons` with the added weapon, but no modification of the
-  `smithy_weapons` collection itself would occur.
+* `(list:add! something smithy_weapons)` adds `something` to the
+  `smithy_weapons` collection. Without the `!`, this would be a computation
+  returning a copy of `smithy_weapons` with the added weapon, but no
+  modification of the `smithy_weapons` collection itself would occur. You can
+  have multiple `something` to add to the same list in the same `list:add` call.
+* `(list:access 0 my_list)` gets you the first element of `my_list`. If the
+   index is a constant, it is preferable to write `my_list.0` instead.
 * `(cons something something_else)` creates a pair with these two elements.
 * `(car weapon_offer)` returns the first element of the `weapon_offer` pair.
 * `(cdr weapon_offer)` returns the second element of the `weapon_offer` pair.
+
 
 Overall, the `smithy.fate` file is a mess. Let's start cleaning it up. We'll
 use loops, conditionals, and lambda functions to make it much cleaner. Let's
@@ -244,43 +241,43 @@ start with the least expected one: [lambda functions](/learn/lambdas).
 
 ----
 
-## Unchanged Files
+## (Mostly) Unchanged Files
 
 **data.fate:**
 {{< fatecode >}}(fate_version 1)
 
-(declare_structure weapon
+(declare_structure #weapon
    (text name)
    (int attack)
    (int precision)
 )
 
-(declare_structure armor
+(declare_structure #armor
    (text name)
    (int defense)
 )
 
-(declare_structure character
+(declare_structure #character
    (string name)
    (int money)
-   (weapon weapon)
-   (armor armor)
+   (#weapon weapon)
+   (#armor armor)
 )
 
-(global character hero)
+(global #character hero)
 
-(set_fields! hero.weapon
+(struct:set_fields! hero.weapon
    (name (text "Legendary" sword))
    (attack 3)
    (precision 50)
 )
 
-(set_fields! hero.armor
+(struct:set_fields! hero.armor
    (name (text "Refined" attire))
    (defense 1)
 )
 
-(set hero.money 42)
+(set! hero.money 42)
 {{< /fatecode >}}
 
 **get_a_refill.fate:**
@@ -288,6 +285,7 @@ start with the least expected one: [lambda functions](/learn/lambdas).
 
 (require data.fate)
 (require actions.fate)
+(require smithy.fate)
 
 (define_sequence lower_price_of_booze
    (
@@ -295,11 +293,8 @@ start with the least expected one: [lambda functions](/learn/lambdas).
       (int decrease)
    )
    Great! The price of booze just lowered from (at price_pointer)
-   (set (at price_pointer)
-      (-
-         (at price_pointer)
-         (var decrease)
-      )
+   (set! (at price_pointer)
+      (- (at price_pointer) decrease)
    )
    to (at price_pointer)!
 )
@@ -307,25 +302,24 @@ start with the least expected one: [lambda functions](/learn/lambdas).
 (define_sequence get_a_refill ()
    (local int price_of_booze)
 
-   (set price_of_booze 12)
+   (set! price_of_booze 12)
 
    Staring straight at the barman, you raise your glass and proclaim:
    (newline)
    "This soon-to-be world savior needs more booze!"
    (newline)
    The barman's lack of reaction is disappointing, but seeing the beer being
-   poured does help improve the mood.
+   poured does improve your mood.
    (newline)
    Satisfied, you hand the barman (var price_of_booze) copper coins.
-   (visit pay (var price_of_booze))
-   (newline)
+   (visit! pay price_of_booze)
    The barman sighs, then asks:
-   (prompt_string (ptr hero.name) 2 64 What is your name, then, hero?)
+   (prompt_string! (ptr hero.name) 2 64 What is your name, then, hero?)
    (var hero.name)?
    (newline)
    The barman looks surprised.
    (newline)
-   (visit lower_price_of_booze (ptr price_of_booze) 4)
+   (visit! lower_price_of_booze (ptr price_of_booze) 4)
    (newline)
    "I have heard of you, (var hero.name)," the barman exclaims, "I have a quest
    for you!"
@@ -336,6 +330,7 @@ start with the least expected one: [lambda functions](/learn/lambdas).
    (newline)
    "Take this pre-payment and head to the smithy."
    (newline)
+   (visit! visit_smithy)
 )
 {{< /fatecode >}}
 
@@ -345,10 +340,9 @@ start with the least expected one: [lambda functions](/learn/lambdas).
 (require data.fate)
 
 (define_sequence pay ( (int cost) )
-   (set hero_money
-      (- (var hero.money) (var cost))
-   )
+   (set! hero.money (- hero.money cost))
 )
+
 {{< /fatecode >}}
 
 **falling_asleep.fate:**
@@ -364,16 +358,19 @@ start with the least expected one: [lambda functions](/learn/lambdas).
    (newline)
    Upon waking up, your hard-trained reflexes inform you that someone stole all
    your money.
-   (set hero.money 0)
+   (set! hero.money 0)
    (newline)
-   This set-back was more than you could take. You give up on this barely
+   This set-back was more than you could handle. You give up on this barely
    coherent story.
-   (end)
+   (end!)
 )
 {{< /fatecode >}}
 
 **main.fate:**
 {{< fatecode >}}(fate_version 1)
+
+(require get_a_refill.fate)
+(require falling_asleep.fate)
 
 Once upon a time, starting a story with these words wasn't considered a cliche.
 Starting in a tavern might also not be seen as very original.  Having the main
@@ -388,19 +385,14 @@ anything. Worse, the alcoholic trait is part of the image.
 As you contemplate your own pointless description, your gaze leaves what turns
 out to be an already empty glass in your hand and finds the barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      (visit get_a_refill)
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
    )
-   (
-      ( Fall asleep )
-      (jump_to fall_asleep)
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
    )
 )
 
-(require get_a_refill.fate)
-(require falling_asleep.fate)
-
-(end)
+(end!)
 {{< /fatecode >}}

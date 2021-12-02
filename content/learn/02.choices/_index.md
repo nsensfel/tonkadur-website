@@ -32,39 +32,34 @@ As you contemplate your own pointless description, your gaze leaves
 what turns out to be an already empty glass in your hand and finds the
 barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      Staring straight at the barman, you raise your glass and
-      proclaim:
+(player_choice!
+   (option ( Ask the barman for a refill )
+      Staring straight at the barman, you raise your glass and proclaim:
       (newline)
       "This soon-to-be world savior needs more booze!"
    )
-   (
-      ( Fall asleep )
-      Deciding to break away from the expected storyline, you promptly
-      fall asleep.
+   (option ( Fall asleep )
+      Deciding to break away from the expected storyline, you promptly fall
+      asleep.
    )
-   (
-      ( Resolve whether P=NP )
-      Sadly, the output for this choice would require some concepts
-      that haven't been introduced yet, so let's never mention it
-      again.
+   (option ( Resolve whether P=NP )
+      Sadly, the output for this choice would require some concepts that
+      haven't been introduced yet, so let's never mention it again.
    )
 )
 
-(end)
+(end!)
 {{< /fatecode >}}
 
 In this version, the player is able to interact with the story: once
-`player_choice` is reached, the output stops and the player is presented with
+`player_choice!` is reached, the output stops and the player is presented with
 options. Here, three choices are available. A choice is made of a label and a
 list of instructions. The label is the text which is displayed to player (for
 example `Fall asleep`). The list of instructions is what will be performed if
 that choice is selected. Putting text where instructions are expected simply
 outputs the text. In fact, all the content of the previous step was
 instructions. Once a choice has been made and the instructions have been
-performed, the story continues past the `player_choice` construct.
+performed, the story continues past the `player_choice!` construct.
 
 But something critical is missing. Indeed, how can you get a refill without
 money? Just how much money does our hero have? Will it be enough to quench that

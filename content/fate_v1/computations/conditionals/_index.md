@@ -10,13 +10,22 @@ some condition. All possible returned values must be of the same type.
 Returns `C0` is `[BOOL]` yields true, `C1` otherwise.
 
 ### COND
-{{< fatecode >}}(cond ([B0 = BOOL] [C0 = COMPUTATION]) ... ([BN = BOOL] [CN = COMPUTATION])){{< /fatecode >}}
+{{< fatecode >}}(cond
+   ([B0 = BOOL] [C0 = COMPUTATION])
+   ...
+   ([BN = BOOL] [CN = COMPUTATION])
+){{< /fatecode >}}
 
 Returns `[CI]`, such that `[BI]` is the first to hold true. If there is not such
 `Bi`, returns `[CN]`.
 
 ### SWITCH
-{{< fatecode >}}(switch [T = COMPUTATION] ([V0 = COMPUTATION] [C0 = COMPUTATION]) ... ([VN = BOOL] [CN = COMPUTATION]) [D = COMPUTATION]){{< /fatecode >}}a
+{{< fatecode >}}(switch [T = COMPUTATION]
+   ([V0 = COMPUTATION] [C0 = COMPUTATION])
+   ...
+   ([VN = BOOL] [CN = COMPUTATION])
+   [D = COMPUTATION]
+){{< /fatecode >}}a
 
 Returns the first `CI` such that `VI` is equal to `T`. If there is not such
 `VI`, returns `[D]`.

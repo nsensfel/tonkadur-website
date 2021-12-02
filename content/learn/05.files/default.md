@@ -15,9 +15,7 @@ but only if that file has not already been explored.
 
 {{< fatecode >}}(fate_version 1)
 
-(global int hero_money)
-
-(set hero_money 42)
+(global int hero_money 42)
 {{< /fatecode >}}
 
 * Create a new file, `actions.fate`, with the following content:
@@ -27,10 +25,9 @@ but only if that file has not already been explored.
 (require data.fate)
 
 (define_sequence pay ( (int cost) )
-   (set hero_money
-      (- (var hero_money) (var cost))
-   )
+   (set! hero_money (- hero_money cost))
 )
+
 {{< /fatecode >}}
 
 * Create a new file, `get_a_refill.fate`, with the following content:
@@ -42,17 +39,17 @@ but only if that file has not already been explored.
 (define_sequence get_a_refill ()
    (local int price_of_booze)
 
-   (set price_of_booze 12)
+   (set! price_of_booze 12)
 
    Staring straight at the barman, you raise your glass and proclaim:
    (newline)
    "This soon-to-be world savior needs more booze!"
    (newline)
    The barman's lack of reaction is disappointing, but seeing the beer being
-   poured does help improve the mood.
+   poured does improve your mood.
    (newline)
    Satisfied, you hand the barman (var price_of_booze) copper coins.
-   (visit pay (var price_of_booze))
+   (visit! pay price_of_booze)
 )
 {{< /fatecode >}}
 
@@ -69,17 +66,20 @@ but only if that file has not already been explored.
    (newline)
    Upon waking up, your hard-trained reflexes inform you that someone stole all
    your money.
-   (set hero_money 0)
+   (set! hero_money 0)
    (newline)
-   This set-back was more than you could take. You give up on this barely
+   This set-back was more than you could handle. You give up on this barely
    coherent story.
-   (end)
+   (end!)
 )
 {{< /fatecode >}}
 
 **main.fate:**
 
 {{< fatecode >}}(fate_version 1)
+
+(require get_a_refill.fate)
+(require falling_asleep.fate)
 
 Once upon a time, starting a story with these words wasn't considered a cliche.
 Starting in a tavern might also not be seen as very original.  Having the main
@@ -94,21 +94,16 @@ anything. Worse, the alcoholic trait is part of the image.
 As you contemplate your own pointless description, your gaze leaves what turns
 out to be an already empty glass in your hand and finds the barman.
 
-(player_choice
-   (
-      ( Ask the barman for a refill )
-      (visit get_a_refill)
+(player_choice!
+   (option ( Ask the barman for a refill )
+      (visit! get_a_refill)
    )
-   (
-      ( Fall asleep )
-      (jump_to fall_asleep)
+   (option ( Fall asleep )
+      (jump_to! fall_asleep)
    )
 )
 
-(require get_a_refill.fate)
-(require falling_asleep.fate)
-
-(end)
+(end!)
 {{< /fatecode >}}
 
 With this, the story is much more easy to follow. Let's continue by looking
