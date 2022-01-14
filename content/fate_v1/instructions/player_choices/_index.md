@@ -30,6 +30,20 @@ A special version of the `for` loop is also possible, as described below:
 ### USER CHOICE - FOR
 TODO
 
+### COMMAND PROMPT
+{{< fatecode >}}(prompt_command! [(STRING LIST) REFERENCE] [MIN = INT] [MAX = INT] [TEXT]){{< /fatecode >}}
+
+Prompts the user for a list of strings separated by spaces. `[MIN]` and `[MAX]`
+indicate the total number of characters (spaces included) allowed as input.
+The `[TEXT]` message is prompted to the user. The result is stored in
+`[(STRING LIST) REFERENCE]`.
+
+### FLOAT PROMPT
+{{< fatecode >}}(prompt_float! [FLOAT REFERENCE] [MIN = FLOAT] [MAX = FLOAT] [TEXT]){{< /fatecode >}}
+
+Prompts the user for a float between `[MIN]` and `[MAX]` by displaying the
+message `[TEXT]`. The result is stored in `[FLOAT REFERENCE]`.
+
 ### INTEGER PROMPT
 {{< fatecode >}}(prompt_integer! [INT REFERENCE] [MIN = INT] [MAX = INT] [TEXT]){{< /fatecode >}}
 

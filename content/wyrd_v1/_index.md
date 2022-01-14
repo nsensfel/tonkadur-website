@@ -1,57 +1,49 @@
 ---
-menuTitle: Wyrd
-title: Wyrd (Version 1)
+menuTitle: Wyrd Interpreter
+title: Coding a Wyrd (Version 1) Interpreter
 weight: 4
 ---
 Wyrd is the language in which the narrative is given to the game engine. It is
 purposefully kept small and simple to facilitate porting Tonkadur to a new
 engine.
 
-The memory is seen as a table mapping strings to values. These values may also
-be tables. Thus a reference is a list of strings corresponding to a move from
-one table to the next.
+This part of the website guides you through the implementation of a Wyrd
+interpreter.
 
-The program is a list of instructions. These instructions may use computations
-as parameters. They sometimes use hard-coded strings parameters as well.
-Instructions cannot take instructions as parameters. Instructions are not
-associated to any value.
+Wyrd files are meant to use easily parsable formats. Tonkadur provides Wyrd
+files as JSON, since JSON parsers are commonly available in pretty much any
+general programming language. However, the code generating this output is
+cleanly separated from the rest of the compiler, so changing the compiler to
+output in a different format should be approachable.
 
-An integer, called _Program Counter_ is used to indicate the current
-instruction. In most cases, this integer is incremented by one after every
-instruction. There is an instruction to modify the value of the Program Counter,
-which allows conditional jumps and loops to be described.
+As with Fate, Wyrd is split into computations and instructions. As a
+reminder, computations do not modify the memory, whereas instructions may.
+Furthermore, a computation in Fate may actually result in instructions in
+Wyrd (a notable example being the `random` Fate computation, which is actually
+implemented using the `set_random` Wyrd instruction).
 
-Computations are values and operations returning values. These are solely used
-as parameters of instructions. They do not alter memory (with one exception)
-and do not interact with the Program Counter in any way. An execution cannot be
-stopped during the evaluation of a computation: it is part of its parent
-instruction and is thus completed exactly when that instruction is performed.
-Computations may _read_ from the memory, as they may need to fetch the value
-associated with an address or traverse tables. All computations have a return
-type.
+Here is an overview of the Wyrd interpreter:
+{{< svg "static/images/wyrd_interpreter_overview.svg" "1000px" >}}
 
-Wyrd does not have the notion of sequence or that lambda functions. It does not
-even associate player choices with lists of actions. It's all done by carefully
-managing the Program Counter.
+The state a Wyrd story is described by `<State>`, a structure defined on [this
+page](/wyrd_v1/state).
 
-Lambda functions are stored as an `INT` corresponding to a line in the program.
-
-## Types
-* `ADDRESS` (or `POINTER`, or `REFERENCE`), a list of `STRING` (note: not a
-   `STRING COLLECTION`).
-* `BOOL`. This should be changed to `BOOL` soon, for consistency's sake.
-* `[SOMETHING] COLLECTION`, table mapping `STRING` to `[SOMETHING]`.
-* `FLOAT`.
-* `INT`.
-* `TEXT`, a list of `STRINGS` with attributes attached.
-* `STRING`.
-* `STRUCTURE` (or `DICTIONARY`), table mapping `STRING` to values of any type.
-* `{String}`, a hard-coded string.
-
-#### Aliases sometimes used to refer to types
-* `? ADDRESS`: an `ADDRESS` pointing to a particular type.
-* `BASE TYPE`: `INT`, `FLOAT`, `BOOL`, `STRING`.
-* `COMPARABLE`: `INT`, `FLOAT`, `BOOL`, `STRING`, `TEXT`, `ADDRESS`.
-* `COLLECTION`: any `? COLLECTION`.
-* `COMPUTATION`: any type.
-* `NUMBER`: `INT` or `FLOAT`.
+* `execute(<State>)` executes the next `<Instruction>` and returns the updated
+   `<State>`. The semantics of each `<Instruction>` is explained on [this
+   page](/wyrd_v1/instruction). Their effect on the `{User Interface}` is
+   communicated by a `<InstructionResult>` member of `<State>`, but this it can
+   alternatively be returned alongside the updated `<State>` if the
+   implementation language permits it. All possible such effects are described
+   on [this page](/wyrd_v1/instruction_result).
+* Calls to `compute(<State>, <Computation>)` come from two sources: resolving
+  the parameters of an `<Instruction>` and resolving the parameters of
+  `<Computation>` (recursive call). The semantics of each `<Computation>` is
+  defined on [this page](/wyrd_v1/computation) and is computed according to
+  current `<State>` (they do not, however, modify it). The result is given as a
+  `<Value>`, the semantics of which can be found on [this page](/wyrd_v1/value).
+* The user may be called to provide an `<Input>`. This is presented by
+  `handle_input(<Input>, <State>)` on the figure above. The different
+  `<Input>`s and how to handle them are described on [this
+  page](/wyrd_v1/input).
+* The parsing process (`parse(<File>)`) is described on [this
+  page](/wyrd_v1/file).

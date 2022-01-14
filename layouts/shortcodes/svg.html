@@ -1,0 +1,3 @@
+<div class="svg-container" style="width: {{(print (index .Params 1))}}">
+{{ readFile (print (index .Params 0)) | safeHTML }}
+</div>

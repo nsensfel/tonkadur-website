@@ -1,6 +1,6 @@
 ---
-title: "Fate (Version 1)"
-menuTitle: "Fate"
+title: "Fate Language (Version 1) Documentation"
+menuTitle: "Fate Language"
 weight: 3
 ---
 
