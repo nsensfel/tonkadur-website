@@ -5,6 +5,7 @@ weight: 3
 ---
 This page presents all the `<Computation>`s that can be performed in Wyrd.
 `<Computation>`s do not modify the memory, but they always return a `<Value>`.
+Be careful not to modify the memory through reference when computing values.
 
 **Shortcut to each `<Computation>`:**
 * [`(add_text_effect {name: String} {parameters: <Computation> List} {values: <Computation> list})`](#add_text_effect)
@@ -103,77 +104,195 @@ The following conversions are expected to be available:
 ### constant
 `(constant {type: String} {value: String})`
 
+Constant value.
+
 **Parameters:**
+* `type` is a `{String}` indicating the type the other parameter should be
+   converted to.
+* `value` is a `{String}` representation of the value that should be returned.
 
 **Process:**
+* Parse the value of `value` according to `type`.
+* Return the corresponding `<Value>`.
+
+**Notes:**
+The `type` parameter can take the following values: `"string"`, `"float"`,
+   `"int"`, and `"bool"`.
 
 ### get_allocable_address
 `(get_allocable_address)`
 
+Get an allocable address.
+
 **Process:**
+* Return an `<PointerValue>` corresponding to an unused address.
+
+**Notes:**
+Process when using the suggested `<State>` definition:
+* If the `<State>`'s `freed_addresses` collection has elements, return a
+`<PointerValue>` corresponding to one of its elements.
+* Otherwise, create a string `addr` corresponding to `".alloc."` to which the
+   `<State>`'s `allocated_data` integer has been added then return a new
+   `<PointerValue>` with a singleton list containing `addr`.
+As a reminder, `<State>` is not modified by the procedure.
 
 ### if_else
 `(if_else <condition: Computation> <if_true: Computation> <if_false: Computation>)`
 
 **Parameters:**
+* `condition` is a `<Computation>` that will indicate which other computation to
+   consider.
+* `if_true` is a `<Computation>` that will be considered only if the `condition`
+   is verified.
+* `if_false` is a `<Computation>` that will be considered only if the `condition`
+   is not verified.
 
 **Process:**
+* Compute the `<BoolValue>` resulting from `condition`.
+* Interpret this `<BoolValue>` as a `{Boolean}`.
+* If it yielded `TRUE`, compute and return the `<Value>` resulting from
+  `if_true`, otherwise, compute and return the `<Value>` resulting from
+  `if_false`.
 
 ### last_choice_index
 `(last_choice_index)`
 
+Get the index of the user's last chosen option.
+
 **Process:**
+* Return an `<IntValue>` corresponding to the `<State>`'s `last_choice_index`.
 
 ### newline
 `(newline)`
 
+Return a newline value.
+
 **Process:**
+* Return a `<TextValue>` corresponding to a newline.
 
 ### Unary operation
 `(operation {operator: String} <x: Computation>)`
 
-**Parameters:**
-
-**Process:**
+Interpret as `(operation operator x (BoolValue FALSE))`. It is recommended to
+have the parser do that conversion automatically.
 
 ### operation
 `(operation {operator: String} <x: Computation> <y: Computation>)`
 
+Performs a basic operation.
+
 **Parameters:**
+* `operator` is the name of the operation.
+* `x` is the first operand.
+* `y` is the second operand.
 
 **Process:**
+* Compute `<val_x: Value>` and `<val_y: Value>`, the `<Values>` corresponding to
+   `x` and `y`, respectively.
+* See the *Notes* below for which operators are expected.
+* Return the result of the operation.
+
+**Notes:**
+`val_x` and `val_y` always have the same type. If the returned value is a
+number, it has the same type as `val_x` and `val_y`. Number types are
+`<FloatValue>` and `<IntValue>`. Comparable types are `<FloatType>`,
+`<IntValue>`, `<StringType>`, `<BoolType>`, and `<PointerType>`.
+
+*Operands are numbers, returns number*:
+* `divide`, returning the value corresponding to `val_x` divided by `val_y`.
+   This is an integer division if and only if `val_x` is an integer.
+* `minus`, returning the value corresponding to `val_x` minus `val_y`.
+* `plus`, returning the value corresponding to `val_x` plus `val_y`.
+* `power`, returning the value corresponding to `val_x` to the power `val_y`.
+* `times`, returning the value corresponding to `val_x` times `val_y`.
+
+*Operands are `<IntValue>`s, returns `<IntValue>`:*
+* `modulo`, returning the value corresponding to `val_x` modulo `val_y`.
+
+*Operands are `<BoolValue>`s, returns `<BoolValue>`:*
+* `and`, returning `(BoolValue TRUE)` if both `val_x` and `val_y` are
+  `(BoolValue TRUE)`, `(BoolValue FALSE)` otherwise. Do not evaluate `val_y` if
+  `val_x` yielded `(BoolBalue FALSE)` (lazy evaluation).
+* `not`, returning `(BoolValue TRUE)` if `val_x` is `(BoolValue FALSE)`.
+   Otherwise, return `(BoolValue FALSE)`.
+
+*Operands are comparable, returns `<BoolValue>`:*
+* `less_than` returning `(BoolValue TRUE)` if `val_x` is less than `val_y` and
+  `(BoolType FALSE)` otherwise.  `(BoolType FALSE)` is less than
+  `(BoolType TRUE)`. `<PointerValue>`s can be compared by comparing the strings
+  corresponding to having joined all elements in their respective string lists.
+
+*Operands can be any type, returns `<BoolValue>`:*
+* `equals` returns `(BoolValue TRUE)` if `val_x` has the same value as `val_y`,
+  `(BoolType FALSE)` otherwise.  Be sure to compare values and not identity
+  (value vs reference).
 
 ### relative_address
 `(relative_address <target: Computation> <extra: Computation>)`
 
+Appends to an address.
+
 **Parameters:**
+* `target` is a `<Computation>` that will yield the base address to extend.
+* `extra` is a `<Computation>` corresponding to the `<StringValue>` element to
+  add to the address.
 
 **Process:**
+* Compute the `<PointerValue>` corresponding to `target`.
+* Compute the `<StringValue>` corresponding to `extra`.
+* Return a new `<PointerValue>` corresponding to the previous `<PointerValue>`,
+   but with its list of strings now having been extended by the addition of the
+   string equivalent to that `<StringValue>`.
 
 ### size
 `(size <target: Computation>)`
 
+Computes the size of a list.
+
 **Parameters:**
+* `target` is a `<Computation>` that will yield a `<PointerValue>` pointing to
+   a `<ListValue>`.
 
 **Process:**
+* Compute the `<PointerValue>` yielded by `target`.
+* Return a new `<IntValue>` corresponding to the number of elements in the
+   `<ListValue>` pointed to by that `<PointerValue>`.
 
 ### text
 `(text {values: <Computation> List})`
 
+Merges a list of text values into a single one.
+
 **Parameters:**
+* `values` is a list of `<Computation>`s that will yield `<TextValue>`s.
 
 **Process:**
+* Compute the `<Value>` corresponding ot each element of `values`.
+* Return a new `<TextValue>` corresponding to these `<Values>` appended one
+  after the next.
 
 ### value_of
 `(value_of <target: Computation>)`
 
+Retries the value from memory.
+
 **Parameters:**
+* `target` is a `<Computation>` that will yield the address of the memory
+   element to get the value of.
 
 **Process:**
+* Compute the value of `target`.
+* Return the `<Value>` pointed to by `target` in the `<State>`'s `memory`.
 
 ### extra_computation
 `({extra_computation} {parameters: <Computation> List})`
 
+Performs non-standard computation.
+
 **Parameters:**
+* `extra_computation` is the name of the extra computation.
+* `parameters` is a list of parameters for this computation call.
 
 **Process:**
+* Undetermined. This is where you choose the process according to the value of
+   `extra_computation` so that you can add non-standard computations.
